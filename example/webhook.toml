@@ -1,0 +1,8 @@
+[database]
+name = "dbname"
+user = "user"
+password = "password"
+host = "db host"
+
+[group]
+groups = ["exmaple"]

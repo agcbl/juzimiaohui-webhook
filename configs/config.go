@@ -20,10 +20,15 @@ type Group struct {
 	Groups []string
 }
 
+type Word struct {
+	Words []string
+}
+
 type Config struct {
 	Database *Database
-	LarkBotPath *LarkBotPath
+	Lark *LarkBotPath
 	Group *Group
+	Word *Word
 }
 
 var DefaultConfig Config

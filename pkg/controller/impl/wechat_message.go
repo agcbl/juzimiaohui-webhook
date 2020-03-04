@@ -25,7 +25,7 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 	}
 
 	for _, group := range configs.DefaultConfig.Group.Groups {
-		if wechatMessage.RoomTopic == group {
+		if wechatMessage.RoomId == group {
 			log.Printf("receive message: %v\n", wechatMessage)
 			impl.DefaultWechatMessageDAO.Create(wechatMessage)
 			DefaultNotificationController.CreateNotification(

@@ -16,10 +16,6 @@ type LarkBotPath struct {
 	Path string
 }
 
-type Group struct {
-	Groups []string
-}
-
 type Word struct {
 	Words []string
 }
@@ -27,7 +23,6 @@ type Word struct {
 type Config struct {
 	Database *Database
 	Lark *LarkBotPath
-	Group *Group
 	Word *Word
 }
 

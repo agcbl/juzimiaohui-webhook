@@ -1,5 +1,7 @@
 package controller
 
+import "github.com/fatelei/juzihudong-sdk/pkg/model"
+
 type WechatRoomController interface {
-	ListRooms(page int64, pageSize int64)
+	CreatRoom(room *model.Room)
 }

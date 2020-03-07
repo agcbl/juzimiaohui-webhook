@@ -4,5 +4,8 @@ user = "user"
 password = "password"
 host = "db host"
 
-[group]
-groups = ["exmaple"]
+[word]
+words = ["test"]
+
+[lark]
+path = "bot path"

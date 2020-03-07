@@ -1,14 +1,32 @@
 # juzimiaohui-webhook
 句子秒回 Webhook
 
-## Install
+## Config
 
-### Install from source
+```toml
+[database]
+name = "dbname"
+user = "user"
+password = "password"
+host = "db host"
 
-```shell script
-go get github.com/fatelei/juzhimiaohui-webhook
+[word]
+words = ["test"]
+
+[lark]
+path = "bot path"
 ```
 
-### Binary file
+## Run
 
+### Init room
 
+```shell script
+go run scripts/room/main.go -token Token -config /path/to/webhook.toml
+```
+
+### Run webhook service
+
+```shell script
+docker run -p 8000:8000 -v /path/to/webhook.toml:/etc/webhook.toml fatelei/juzhimiaohui-webhook:1.1
+```

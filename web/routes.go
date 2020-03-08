@@ -7,6 +7,7 @@ import (
 
 func Routes() *gin.Engine {
 	r := gin.Default()
-	r.POST("/message", handlers.MessageCallback)
+	webhookHandler := handlers.NewWebhookHandler()
+	r.POST("/message", webhookHandler.MessageCallback)
 	return r
 }

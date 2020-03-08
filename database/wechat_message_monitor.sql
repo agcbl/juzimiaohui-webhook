@@ -15,11 +15,28 @@ CREATE TABLE `wechat_message_monitor` (
 
 CREATE TABLE `wechat_room` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `room_id` VARCHAR(200) NOT NULL,
+    `room_id` VARCHAR(191) NOT NULL ,
     `room_name` VARCHAR(1024) DEFAULT "",
     `room_member_number` INT(11) DEFAULT 0,
     `open_monitor` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`id`),
-    KEY `idx_room_id` (`room_id`),
+    UNIQUE (`room_id`),
     KEY `idx_room_name` (`room_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `wechat_user_info` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `wechat_id` VARCHAR(1024) DEFAULT "",
+    `room_id` VARCHAR(191) NOT NULL,
+    `wxid` VARCHAR(1024) NOT NULL,
+    `wechat_name` VARCHAR(1024) DEFAULT "",
+    `gender` TINYINT(1) DEFAULT 0,
+    `city` VARCHAR(200) DEFAULT "",
+    `province` VARCHAR(200) DEFAULT "",
+    `avatar_url` VARCHAR(1024) DEFAULT "",
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `last_active_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后活跃时间',
+    PRIMARY KEY (`id`),
+    KEY `idx_wxid_room_id` (`wxid`, `room_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

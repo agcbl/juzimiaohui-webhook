@@ -20,10 +20,16 @@ type Word struct {
 	Words []string
 }
 
+type Juzihudong struct {
+	Endpoint string
+	Token string
+}
+
 type Config struct {
 	Database *Database
 	Lark *LarkBotPath
 	Word *Word
+	Juzihudong *Juzihudong
 }
 
 var DefaultConfig Config

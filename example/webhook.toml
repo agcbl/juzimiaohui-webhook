@@ -9,3 +9,7 @@ words = ["test"]
 
 [lark]
 path = "bot path"
+
+[juzihudong]
+endpoint = "api"
+token = "token"

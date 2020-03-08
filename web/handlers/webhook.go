@@ -7,14 +7,23 @@ import (
 	"net/http"
 )
 
+type WebhookHandler struct {
+	wechatMessageController *impl.WechatMessageControllerImpl
+}
 
-func MessageCallback(c *gin.Context) {
+func NewWebhookHandler() *WebhookHandler {
+	wechatMessageController := impl.NewWechatMessageController()
+	return &WebhookHandler{wechatMessageController:wechatMessageController}
+}
+
+
+func (p *WebhookHandler) MessageCallback(c *gin.Context) {
 	var data model.WechatMessageData
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	impl.DefaultWechatMessageController.Create(&data.Data)
+	p.wechatMessageController.Create(&data.Data)
 	c.JSON(http.StatusCreated, gin.H{})
 	return
 }

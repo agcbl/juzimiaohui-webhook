@@ -9,5 +9,6 @@ WORKDIR $GOPATH/src/github.com/fatelei/juzimiaohui-webhook
 RUN ls -l $GOPATH/src/github.com/fatelei/juzimiaohui-webhook
 RUN go mod tidy
 RUN go build -o bin/web -i cmd/web/main.go
+ENV GIN_MODE=release
 CMD ["bin/web", "-config", "/etc/webhook.toml"]
 EXPOSE 8000

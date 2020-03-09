@@ -40,3 +40,12 @@ CREATE TABLE `wechat_user_info` (
     PRIMARY KEY (`id`),
     KEY `idx_wxid_room_id` (`wxid`, `room_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `keyword` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `word` VARCHAR(50) NOT NULL,
+    `is_opened` TINYINT(1) DEFAULT 1,
+    PRIMARY KEY (`id`),
+    UNIQUE `idx_word` (`word`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

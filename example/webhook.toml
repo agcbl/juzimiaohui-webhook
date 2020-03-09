@@ -4,12 +4,12 @@ user = "user"
 password = "password"
 host = "db host"
 
-[word]
-words = ["test"]
-
 [lark]
 path = "bot path"
 
 [juzihudong]
 endpoint = "api"
 token = "token"
+
+[keyword]
+sync_timer = 5

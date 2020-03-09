@@ -16,20 +16,20 @@ type LarkBotPath struct {
 	Path string
 }
 
-type Word struct {
-	Words []string
-}
-
 type Juzihudong struct {
 	Endpoint string
 	Token string
 }
 
+type Keyword struct {
+	Tick int
+}
+
 type Config struct {
 	Database *Database
 	Lark *LarkBotPath
-	Word *Word
 	Juzihudong *Juzihudong
+	Keyword *Keyword
 }
 
 var DefaultConfig Config

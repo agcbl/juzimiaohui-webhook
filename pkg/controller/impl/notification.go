@@ -9,14 +9,18 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 )
 
-type NotificationControllerImpl struct {}
-
-var DefaultNotificationController *NotificationControllerImpl
+type NotificationControllerImpl struct {
+	keywordController *KeywordControllerImpl
+}
 
 var _ controller.NotificationController = (*NotificationControllerImpl)(nil)
+
+func NewNotificationController() *NotificationControllerImpl {
+	keywordController := NewKeywordController()
+	return &NotificationControllerImpl{keywordController:keywordController}
+}
 
 
 func (p *NotificationControllerImpl) CreateNotification(room string, contact string, content string) {
@@ -24,13 +28,7 @@ func (p *NotificationControllerImpl) CreateNotification(room string, contact str
 	var err error
 	var rst []byte
 	var resp *http.Response
-	var flag = false
-	for _, word := range configs.DefaultConfig.Word.Words {
-		if strings.Contains(content, word) {
-			flag = true
-			break
-		}
-	}
+	flag := p.keywordController.Search(content)
 
 	if flag {
 		body, err = json.Marshal(map[string]string{

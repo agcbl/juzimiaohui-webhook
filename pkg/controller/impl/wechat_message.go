@@ -11,21 +11,24 @@ import (
 
 type WechatMessageControllerImpl struct {
 	contactApi *juzihudong.ContactApi
+	notificationController *NotificationControllerImpl
 }
 var _ controller.WechatMessageController = (*WechatMessageControllerImpl)(nil)
 
 
 func NewWechatMessageController() *WechatMessageControllerImpl {
 	contactApi := juzihudong.NewContactApi(configs.DefaultConfig.Juzihudong.Endpoint, configs.DefaultConfig.Juzihudong.Token)
+	notificationController := NewNotificationController()
 	wechatMessageController := &WechatMessageControllerImpl{
 		contactApi:contactApi,
+		notificationController: notificationController,
 	}
 	return wechatMessageController
 }
 
 
 func (p *WechatMessageControllerImpl) recordActive(message *model.WechatMessage) {
-	recordId := impl.DefaultWechatUserInfoDAO.Get(message.ContactId, message.RoomId)
+	recordId := impl.DefaultWechatUserInfoDAO.Get(message.ContactId)
 	if recordId > 0 {
 		impl.DefaultWechatUserInfoDAO.UpdateLastActiveTime(recordId)
 		log.Printf("update last active time %d\n", recordId)
@@ -34,13 +37,13 @@ func (p *WechatMessageControllerImpl) recordActive(message *model.WechatMessage)
 		if len(*resp.Data) > 0 {
 			for _, contact := range *resp.Data {
 				impl.DefaultWechatUserInfoDAO.Create(
-					contact.Weixin, message.ContactId, message.RoomId, message.ContactName, int(contact.Gender), contact.City, contact.Province, contact.AvatarUrl)
+					contact.Weixin, message.ContactId, message.ContactName, int(contact.Gender), contact.City, contact.Province, contact.AvatarUrl)
 				log.Printf("record active with %+v\n", contact)
 				break
 			}
 		} else {
 			impl.DefaultWechatUserInfoDAO.Create(
-				"", message.ContactId, message.RoomId, message.ContactName, 0, "", "", "")
+				"", message.ContactId, message.ContactName, 0, "", "", "")
 			log.Println("record active without wechat_id")
 		}
 	}
@@ -57,7 +60,7 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 	if room != nil && room.OpenMonitor == 1 {
 		log.Printf("receive message: %+v\n", wechatMessage)
 		impl.DefaultWechatMessageDAO.Create(wechatMessage)
-		DefaultNotificationController.CreateNotification(
+		p.notificationController.CreateNotification(
 			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.GetContent())
 		p.recordActive(wechatMessage)
 	} else {

@@ -10,15 +10,15 @@ user = "user"
 password = "password"
 host = "db host"
 
-[word]
-words = ["test"]
-
 [lark]
 path = "bot path"
 
 [juzihudong]
 endpoint = "api"
 token = "token"
+
+[keyword]
+sync_timer = 5
 ```
 
 ## Run
@@ -67,6 +67,14 @@ CREATE TABLE `wechat_user_info` (
     `last_active_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后活跃时间',
     PRIMARY KEY (`id`),
     KEY `idx_wxid_room_id` (`wxid`, `room_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `wechat_keywords` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `word` VARCHAR(50) NOT NULL,
+    `is_opened` TINYINT(1) DEFAULT 1,
+    PRIMARY KEY (`id`),
+    UNIQUE `idx_word` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 

@@ -16,30 +16,30 @@ func init() {
 }
 
 
-func (p *WechatUserInfoDAOImpl) Create(wechatId string, wxid string, roomId string, wechatName string, gender int, city string, province string, avatarUrl string) {
+func (p *WechatUserInfoDAOImpl) Create(wechatId string, wxid string, wechatName string, gender int, city string, province string, avatarUrl string) {
 	stmtIns, err := connection.DB.Prepare(
-		"INSERT INTO wechat_user_info (wechat_id, room_id, wxid, wechat_name, gender, city, province, avatar_url) VALUES(?, ?, ?, ?, ?, ?, ?, ?)")
+		"INSERT INTO wechat_user_info (wechat_id, wxid, wechat_name, gender, city, province, avatar_url) VALUES(?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}
 
 	defer stmtIns.Close()
-	_, err = stmtIns.Exec(wechatId, roomId, wxid, wechatName, gender, city, province, avatarUrl)
+	_, err = stmtIns.Exec(wechatId, wxid, wechatName, gender, city, province, avatarUrl)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (p *WechatUserInfoDAOImpl) Get(wxid string, roomId string) int64 {
+func (p *WechatUserInfoDAOImpl) Get(wxid string) int64 {
 	stmtQuery, err := connection.DB.Prepare(
-		"SELECT id FROM wechat_user_info WHERE wxid = ? and room_id = ?")
+		"SELECT id FROM wechat_user_info WHERE wxid = ?")
 	if err != nil {
 		panic(err)
 	}
 
 	defer stmtQuery.Close()
 	var id int64
-	row := stmtQuery.QueryRow(wxid, roomId)
+	row := stmtQuery.QueryRow(wxid)
 	if row != nil {
 		err := row.Scan(&id)
 		if err != nil {

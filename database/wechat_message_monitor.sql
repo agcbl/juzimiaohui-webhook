@@ -28,7 +28,6 @@ CREATE TABLE `wechat_room` (
 CREATE TABLE `wechat_user_info` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `wechat_id` VARCHAR(1024) DEFAULT "",
-    `room_id` VARCHAR(191) NOT NULL,
     `wxid` VARCHAR(1024) NOT NULL,
     `wechat_name` VARCHAR(1024) DEFAULT "",
     `gender` TINYINT(1) DEFAULT 0,
@@ -38,7 +37,7 @@ CREATE TABLE `wechat_user_info` (
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `last_active_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后活跃时间',
     PRIMARY KEY (`id`),
-    KEY `idx_wxid_room_id` (`wxid`, `room_id`)
+    KEY `idx_wxid` (`wxid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

@@ -31,7 +31,7 @@ func (p *NotificationControllerImpl) CreateNotification(room string, contactName
 	var resp *http.Response
 	hitWord := p.keywordController.Search(content)
 	fmt.Printf("hit words: %s\n", hitWord)
-	if len(hitWord) > 0 {
+	if len(hitWord) > 0 && configs.DefaultConfig.Lark != nil {
 		index := strings.Index(content, hitWord)
 		var sendContent string
 		if index != -1 {
@@ -68,25 +68,28 @@ func (p *NotificationControllerImpl) CreateWechatDeathNoti() {
 	var err error
 	var rst []byte
 	var resp *http.Response
-	body, err = json.Marshal(map[string]string{
-		"title": "最近 30 分钟内无消息",
-		"text": "请尽快检查绑定微信是否下线，如果已下线请尽快前往<a href=\"https://wechat.botorange.com/\">句子互动</a>后台重新登录",
-	})
-	if err != nil {
-		panic(err)
-		return
+
+	if configs.DefaultConfig.Lark != nil {
+		body, err = json.Marshal(map[string]string{
+			"title": "最近 30 分钟内无消息",
+			"text": "请尽快检查绑定微信是否下线，如果已下线请尽快前往<a href=\"https://wechat.botorange.com/\">句子互动</a>后台重新登录",
+		})
+		if err != nil {
+			panic(err)
+			return
+		}
+		resp, err = http.Post(
+			configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
+		if err != nil {
+			panic(err)
+			return
+		}
+		defer resp.Body.Close()
+		rst, err = ioutil.ReadAll(resp.Body)
+		if err != nil {
+			panic(err)
+			return
+		}
+		log.Println(string(rst))
 	}
-	resp, err = http.Post(
-		configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
-	if err != nil {
-		panic(err)
-		return
-	}
-	defer resp.Body.Close()
-	rst, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-		return
-	}
-	log.Println(string(rst))
 }

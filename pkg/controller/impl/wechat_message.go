@@ -29,7 +29,9 @@ func NewWechatMessageController() *WechatMessageControllerImpl {
 		recentMessageId: recentMessageId,
 		duplicateCount: 0,
 	}
-	wechatMessageController.checkAlive()
+	if configs.DefaultConfig.Alive != nil {
+		wechatMessageController.checkAlive()
+	}
 	return wechatMessageController
 }
 

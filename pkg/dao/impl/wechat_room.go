@@ -37,18 +37,20 @@ func (p *WechatRoomDAOImpl) Create(room *model.Room) {
 }
 
 func (p *WechatRoomDAOImpl) GetRoomByRoomId(roomId string) *model2.Room {
-	stmtIns, err := connection.DB.Prepare(
+	stmtQuery, err := connection.DB.Prepare(
 		"SELECT * FROM wechat_room WHERE room_id = ?")
 	if err != nil {
 		panic(err)
 	}
 
-	defer stmtIns.Close()
+	defer stmtQuery.Close()
 	room := &model2.Room{}
-	row := stmtIns.QueryRow(roomId)
+	row := stmtQuery.QueryRow(roomId)
 	if row != nil {
 		err := row.Scan(&room.Id, &room.RoomId, &room.RoomName, &room.RoomMemberNumber, &room.OpenMonitor)
-		if err != nil {
+		if err != sql.ErrNoRows {
+			return nil
+		} else {
 			panic(err)
 		}
 		return room

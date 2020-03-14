@@ -30,3 +30,20 @@ func (p *WechatMessageDAOImpl) Create(wechatMessage *model.WechatMessage) {
 		panic(err)
 	}
 }
+
+
+func (p *WechatMessageDAOImpl) GetMaxMessageId() int64 {
+	stmtQuery, err := connection.DB.Prepare(
+		"SELECT MAX(id) FROM wechat_message_monitor")
+	if err != nil {
+		panic(err)
+	}
+
+	defer stmtQuery.Close()
+	row := stmtQuery.QueryRow()
+	var maxId int64
+	if row != nil {
+		row.Scan(&maxId)
+	}
+	return maxId
+}

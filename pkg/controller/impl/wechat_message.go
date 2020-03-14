@@ -7,11 +7,14 @@ import (
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao/impl"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
 	"log"
+	"time"
 )
 
 type WechatMessageControllerImpl struct {
 	contactApi *juzihudong.ContactApi
 	notificationController *NotificationControllerImpl
+	recentMessageId int64
+	duplicateCount int
 }
 var _ controller.WechatMessageController = (*WechatMessageControllerImpl)(nil)
 
@@ -19,10 +22,14 @@ var _ controller.WechatMessageController = (*WechatMessageControllerImpl)(nil)
 func NewWechatMessageController() *WechatMessageControllerImpl {
 	contactApi := juzihudong.NewContactApi(configs.DefaultConfig.Juzihudong.Endpoint, configs.DefaultConfig.Juzihudong.Token)
 	notificationController := NewNotificationController()
+	recentMessageId := impl.DefaultWechatMessageDAO.GetMaxMessageId()
 	wechatMessageController := &WechatMessageControllerImpl{
 		contactApi:contactApi,
 		notificationController: notificationController,
+		recentMessageId: recentMessageId,
+		duplicateCount: 0,
 	}
+	wechatMessageController.checkAlive()
 	return wechatMessageController
 }
 
@@ -61,9 +68,35 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 		log.Printf("receive message: %+v\n", wechatMessage)
 		impl.DefaultWechatMessageDAO.Create(wechatMessage)
 		p.notificationController.CreateNotification(
-			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.GetContent())
+			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())
 		p.recordActive(wechatMessage)
 	} else {
 		log.Printf("not support group %s\n", wechatMessage.RoomId)
 	}
+}
+
+
+func (p *WechatMessageControllerImpl) checkAlive() {
+	go func() {
+		for {
+			time.Sleep(time.Duration(configs.DefaultConfig.Alive.Tick) * time.Minute)
+			hour := time.Now().Hour()
+			if hour < configs.DefaultConfig.Alive.StartAt || hour > configs.DefaultConfig.Alive.EndAt {
+				log.Printf("hour %d not in change range %d - %d", hour, configs.DefaultConfig.Alive.StartAt, configs.DefaultConfig.Alive.EndAt)
+				continue
+			}
+			currentMaxMessageId := impl.DefaultWechatMessageDAO.GetMaxMessageId()
+			log.Printf("check wechat is alive: recent message id %d, current message id %d\n", p.recentMessageId, currentMaxMessageId)
+			if currentMaxMessageId == p.recentMessageId {
+				p.duplicateCount += 1
+				if p.duplicateCount > configs.DefaultConfig.Alive.Limit {
+					p.notificationController.CreateWechatDeathNoti()
+					p.duplicateCount = 0
+				}
+			} else {
+				p.recentMessageId = currentMaxMessageId
+				p.duplicateCount = 0
+			}
+		}
+	}()
 }

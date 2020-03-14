@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"github.com/BurntSushi/toml"
 	"io/ioutil"
 )
@@ -25,11 +26,19 @@ type Keyword struct {
 	Tick int
 }
 
+type Alive struct {
+	Tick int
+	Limit int
+	StartAt int `toml:"start_at"`
+	EndAt int `toml:"end_at"`
+}
+
 type Config struct {
 	Database *Database
 	Lark *LarkBotPath
 	Juzihudong *Juzihudong
 	Keyword *Keyword
+	Alive *Alive
 }
 
 var DefaultConfig Config
@@ -44,4 +53,5 @@ func NewConfig(path string) {
 	if _, err = toml.Decode(string(data), &DefaultConfig); err != nil {
 		panic(err)
 	}
+	fmt.Printf("%+v\n", DefaultConfig.Alive)
 }

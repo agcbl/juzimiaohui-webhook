@@ -1,5 +1,6 @@
 package controller
 
 type NotificationController interface {
-	CreateNotification(room string, contact string, content string)
+	CreateNotification(room string, contactName string, contentId string, content string)
+	CreateWechatDeathNoti()
 }

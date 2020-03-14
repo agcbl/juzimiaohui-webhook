@@ -1,5 +1,5 @@
 package controller
 
 type KeywordController interface {
-	Search(word string) bool
+	Search(word string) string
 }

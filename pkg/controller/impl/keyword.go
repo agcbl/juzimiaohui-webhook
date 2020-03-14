@@ -27,16 +27,20 @@ func NewKeywordController() *KeywordControllerImpl {
 	return keywordController
 }
 
-func (p *KeywordControllerImpl) Search(word string) bool {
+func (p *KeywordControllerImpl) Search(word string) string {
 	seq := []byte(word)
 	if value, ok := p.matcherMap.Load(p.key); ok {
 		matcher := value.(*cedar.Matcher)
 		resp := matcher.Match(seq)
 		if resp.HasNext() {
-			return true
+			items := resp.NextMatchItem(seq)
+			for _, itr := range items {
+				key := matcher.Key(seq, itr)
+				return string(key)
+			}
 		}
 	}
-	return false
+	return ""
 }
 
 func buildMatcher() *cedar.Matcher {

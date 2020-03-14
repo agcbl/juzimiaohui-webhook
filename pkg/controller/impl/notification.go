@@ -35,7 +35,7 @@ func (p *NotificationControllerImpl) CreateNotification(room string, contactName
 		index := strings.Index(content, hitWord)
 		var sendContent string
 		if index != -1 {
-			sendContent = fmt.Sprintf("%s「%s」%s", content[:index], hitWord, content[index + len(hitWord):])
+			sendContent = fmt.Sprintf("%s『%s』%s", content[:index], hitWord, content[index + len(hitWord):])
 		} else {
 			sendContent = content
 		}

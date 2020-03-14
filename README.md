@@ -85,5 +85,26 @@ go run scripts/room/main.go -token Token -config /path/to/webhook.toml
 ### Run webhook service
 
 ```shell script
-docker run -p 8000:8000 -v /path/to/webhook.toml:/etc/webhook.toml fatelei/juzhimiaohui-webhook:1.1
+docker run -p 8000:8000 -v /path/to/webhook.toml:/etc/webhook.toml fatelei/juzhimiaohui-webhook:version
 ```
+
+Support version
+- 1.6
+- 1.5
+
+## ChangeLog
+
+[1.6] Support check wechat is alive or not. Config file add config below
+
+```toml
+[alive]
+tick = 10
+limit = 3
+start_at = 2
+end_at = 6
+```
+
+- tick: how frequency to check alive
+- limit: check limit
+- start_at: Check start at
+- end_at: Check end at

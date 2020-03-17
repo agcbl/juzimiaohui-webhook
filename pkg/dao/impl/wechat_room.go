@@ -48,10 +48,12 @@ func (p *WechatRoomDAOImpl) GetRoomByRoomId(roomId string) *model2.Room {
 	row := stmtQuery.QueryRow(roomId)
 	if row != nil {
 		err := row.Scan(&room.Id, &room.RoomId, &room.RoomName, &room.RoomMemberNumber, &room.OpenMonitor)
-		if err == sql.ErrNoRows {
-			return nil
-		} else {
-			panic(err)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				return nil
+			} else {
+				panic(err)
+			}
 		}
 		return room
 	}

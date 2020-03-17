@@ -67,7 +67,6 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 
 	room := impl.DefaultWechatRoomDAOImpl.GetRoomByRoomId(wechatMessage.RoomId)
 	if room != nil && room.OpenMonitor == 1 {
-		log.Printf("receive message: %+v\n", wechatMessage)
 		impl.DefaultWechatMessageDAO.Create(wechatMessage)
 		p.notificationController.CreateNotification(
 			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())

@@ -1,7 +1,6 @@
 package configs
 
 import (
-	"fmt"
 	"github.com/BurntSushi/toml"
 	"io/ioutil"
 )
@@ -53,5 +52,4 @@ func NewConfig(path string) {
 	if _, err = toml.Decode(string(data), &DefaultConfig); err != nil {
 		panic(err)
 	}
-	fmt.Printf("%+v\n", DefaultConfig.Alive)
 }

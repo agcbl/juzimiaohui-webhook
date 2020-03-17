@@ -61,7 +61,7 @@ func (p *WechatMessageControllerImpl) recordActive(message *model.WechatMessage)
 
 func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage) {
 	if len(wechatMessage.RoomId) == 0 {
-		log.Print("not group message")
+		log.Println("not group message")
 		return
 	}
 

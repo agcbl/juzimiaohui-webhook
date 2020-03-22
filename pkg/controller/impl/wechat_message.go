@@ -2,6 +2,7 @@ package impl
 
 import (
 	"github.com/fatelei/juzihudong-sdk/pkg/juzihudong"
+	model2 "github.com/fatelei/juzihudong-sdk/pkg/model"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao/impl"
@@ -65,14 +66,32 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 		return
 	}
 
+	var flag = false
 	room := impl.DefaultWechatRoomDAOImpl.GetRoomByRoomId(wechatMessage.RoomId)
-	if room != nil && room.OpenMonitor == 1 {
+	if room == nil {
+		flag = true
+		tmp := model2.Room{
+			ChatId:    "",
+			Members:   nil,
+			BotInfo:   nil,
+			WxId:      wechatMessage.RoomId,
+			Topic:     wechatMessage.RoomTopic,
+			AvatarUrl: "",
+			OwnerId:   "",
+		}
+		impl.DefaultWechatRoomDAOImpl.Create(&tmp)
+		log.Printf("create new room %+v\n", tmp)
+	} else if room.OpenMonitor == 1 {
+		flag = true
+	} else {
+		log.Printf("not support group %s\n", wechatMessage.RoomId)
+	}
+
+	if flag {
 		impl.DefaultWechatMessageDAO.Create(wechatMessage)
 		p.notificationController.CreateNotification(
 			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())
 		p.recordActive(wechatMessage)
-	} else {
-		log.Printf("not support group %s\n", wechatMessage.RoomId)
 	}
 }
 

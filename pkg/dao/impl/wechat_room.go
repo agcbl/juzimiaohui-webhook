@@ -2,10 +2,9 @@ package impl
 
 import (
 	"database/sql"
-	"github.com/fatelei/juzihudong-sdk/pkg/model"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/connection"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao"
-	model2 "github.com/fatelei/juzimiaohui-webhook/pkg/model"
+	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
 	"log"
 )
 
@@ -27,7 +26,7 @@ func (p *WechatRoomDAOImpl) Create(room *model.Room) {
 	}
 
 	defer stmtIns.Close()
-	result, err = stmtIns.Exec(room.WxId, room.Topic)
+	result, err = stmtIns.Exec(room.RoomId, room.RoomName)
 	if err != nil {
 		panic(err)
 	} else {
@@ -36,7 +35,7 @@ func (p *WechatRoomDAOImpl) Create(room *model.Room) {
 	}
 }
 
-func (p *WechatRoomDAOImpl) GetRoomByRoomId(roomId string) *model2.Room {
+func (p *WechatRoomDAOImpl) GetRoomByRoomId(roomId string) *model.Room {
 	stmtQuery, err := connection.DB.Prepare(
 		"SELECT * FROM wechat_room WHERE room_id = ?")
 	if err != nil {
@@ -44,7 +43,7 @@ func (p *WechatRoomDAOImpl) GetRoomByRoomId(roomId string) *model2.Room {
 	}
 
 	defer stmtQuery.Close()
-	room := &model2.Room{}
+	room := &model.Room{}
 	row := stmtQuery.QueryRow(roomId)
 	if row != nil {
 		err := row.Scan(&room.Id, &room.RoomId, &room.RoomName, &room.RoomMemberNumber, &room.OpenMonitor)

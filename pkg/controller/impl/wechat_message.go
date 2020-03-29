@@ -2,7 +2,6 @@ package impl
 
 import (
 	"github.com/fatelei/juzihudong-sdk/pkg/juzihudong"
-	model2 "github.com/fatelei/juzihudong-sdk/pkg/model"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao/impl"
@@ -73,14 +72,12 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 	room := impl.DefaultWechatRoomDAOImpl.GetRoomByRoomId(wechatMessage.RoomId)
 	if room == nil {
 		flag = true
-		tmp := model2.Room{
-			ChatId:    "",
-			Members:   nil,
-			BotInfo:   nil,
-			WxId:      wechatMessage.RoomId,
-			Topic:     wechatMessage.RoomTopic,
-			AvatarUrl: "",
-			OwnerId:   "",
+		tmp := model.Room{
+			Id:               0,
+			RoomId:           wechatMessage.RoomId,
+			RoomName:         wechatMessage.RoomTopic,
+			RoomMemberNumber: 0,
+			OpenMonitor:      0,
 		}
 		impl.DefaultWechatRoomDAOImpl.Create(&tmp)
 		log.Printf("create new room %+v\n", tmp)

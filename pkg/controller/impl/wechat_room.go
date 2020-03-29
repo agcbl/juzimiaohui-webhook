@@ -1,8 +1,8 @@
 package impl
 
 import (
-	"github.com/fatelei/juzihudong-sdk/pkg/model"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao/impl"
+	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
 )
 
 type WechatRoomControllerImpl struct {}

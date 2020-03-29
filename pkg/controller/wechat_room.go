@@ -1,6 +1,9 @@
 package controller
 
-import "github.com/fatelei/juzihudong-sdk/pkg/model"
+import (
+	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
+)
+
 
 type WechatRoomController interface {
 	CreatRoom(room *model.Room)

@@ -7,6 +7,7 @@ CREATE TABLE `wechat_message_monitor` (
   `msg_type` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `room_id` varchar(200) DEFAULT '',
+  `message_id` varchar(32) DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `idx_room` (`room_name`(191)),
   KEY `idx_wechat_name` (`wechat_name`(191))

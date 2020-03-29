@@ -13,6 +13,7 @@ import (
 
 type WechatMessageControllerImpl struct {
 	contactApi *juzihudong.ContactApi
+	meesageApi *juzihudong.MessageApi
 	notificationController *NotificationControllerImpl
 	recentMessageId int64
 	duplicateCount int
@@ -22,10 +23,12 @@ var _ controller.WechatMessageController = (*WechatMessageControllerImpl)(nil)
 
 func NewWechatMessageController() *WechatMessageControllerImpl {
 	contactApi := juzihudong.NewContactApi(configs.DefaultConfig.Juzihudong.Endpoint, configs.DefaultConfig.Juzihudong.Token)
+	meesageApi := juzihudong.NewMessageApi(configs.DefaultConfig.Juzihudong.Endpoint, configs.DefaultConfig.Juzihudong.Token)
 	notificationController := NewNotificationController()
 	recentMessageId := impl.DefaultWechatMessageDAO.GetMaxMessageId()
 	wechatMessageController := &WechatMessageControllerImpl{
 		contactApi:contactApi,
+		meesageApi:meesageApi,
 		notificationController: notificationController,
 		recentMessageId: recentMessageId,
 		duplicateCount: 0,
@@ -88,6 +91,12 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 	}
 
 	if flag {
+		if wechatMessage.Type == model.Image {
+			image := p.meesageApi.GetArtworkImage(wechatMessage.ChatId, wechatMessage.MessageId)
+			if image != nil && image.Code == 0 && image.Data != nil {
+				wechatMessage.Payload.ImageUrl = image.Data.Url
+			}
+		}
 		impl.DefaultWechatMessageDAO.Create(wechatMessage)
 		p.notificationController.CreateNotification(
 			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())

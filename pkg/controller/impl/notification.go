@@ -87,7 +87,7 @@ func (p *NotificationControllerImpl) CreateWechatDeathNoti() {
 		defer resp.Body.Close()
 		rst, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
-			panic(err)
+			log.Printf("error %+v\n", err)
 			return
 		}
 		log.Println(string(rst))

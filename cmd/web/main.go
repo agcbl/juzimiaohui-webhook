@@ -13,6 +13,7 @@ func main() {
 	var port int
 	var configFile string
 	log.SetFlags(log.Ldate)
+	log.SetFlags(log.Ltime)
 	flag.IntVar(&port, "port", 8000, "http server port")
 	flag.StringVar(&configFile,"config", "/etc/webhook.toml", "webhook config path")
 	flag.Parse()

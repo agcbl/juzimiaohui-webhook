@@ -1,6 +1,6 @@
 CREATE TABLE `wechat_message_monitor` (
   `id` bigint(11) NOT NULL AUTO_INCREMENT,
-  `wechat_id` varchar(1024) NOT NULL,
+  `wxid` varchar(1024) NOT NULL,
   `wechat_name` varchar(1024) DEFAULT NULL,
   `room_name` varchar(1024) DEFAULT NULL,
   `content` varchar(1024) NOT NULL,

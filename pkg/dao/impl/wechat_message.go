@@ -18,7 +18,7 @@ func init() {
 
 func (p *WechatMessageDAOImpl) Create(wechatMessage *model.WechatMessage) {
 	stmtIns, err := connection.DB.Prepare(
-		"INSERT INTO wechat_message_monitor (wechat_id, wechat_name, room_name, content, msg_type, room_id, message_id) VALUES(?, ?, ?, ?, ?, ?, ?)")
+		"INSERT INTO wechat_message_monitor (wxid, wechat_name, room_name, content, msg_type, room_id, message_id) VALUES(?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}

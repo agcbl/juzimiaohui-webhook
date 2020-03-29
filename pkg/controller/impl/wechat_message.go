@@ -72,15 +72,17 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 	room := impl.DefaultWechatRoomDAOImpl.GetRoomByRoomId(wechatMessage.RoomId)
 	if room == nil {
 		flag = true
-		tmp := model.Room{
-			Id:               0,
-			RoomId:           wechatMessage.RoomId,
-			RoomName:         wechatMessage.RoomTopic,
-			RoomMemberNumber: 0,
-			OpenMonitor:      0,
+		if wechatMessage.Type != 10001 {
+			tmp := model.Room{
+				Id:               0,
+				RoomId:           wechatMessage.RoomId,
+				RoomName:         wechatMessage.RoomTopic,
+				RoomMemberNumber: 0,
+				OpenMonitor:      0,
+			}
+			impl.DefaultWechatRoomDAOImpl.Create(&tmp)
+			log.Printf("create new room %+v\n", tmp)
 		}
-		impl.DefaultWechatRoomDAOImpl.Create(&tmp)
-		log.Printf("create new room %+v\n", tmp)
 	} else if room.OpenMonitor == 1 {
 		flag = true
 	} else {

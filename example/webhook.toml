@@ -17,5 +17,3 @@ sync_timer = 5
 [alive]
 tick = 10
 limit = 3
-start_at = 2
-end_at = 6

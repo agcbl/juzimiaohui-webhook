@@ -108,11 +108,6 @@ func (p *WechatMessageControllerImpl) checkAlive() {
 	go func() {
 		for {
 			time.Sleep(time.Duration(configs.DefaultConfig.Alive.Tick) * time.Minute)
-			hour := time.Now().Hour()
-			if hour < configs.DefaultConfig.Alive.StartAt || hour > configs.DefaultConfig.Alive.EndAt {
-				log.Printf("hour %d not in change range %d - %d", hour, configs.DefaultConfig.Alive.StartAt, configs.DefaultConfig.Alive.EndAt)
-				continue
-			}
 			currentMaxMessageId := impl.DefaultWechatMessageDAO.GetMaxMessageId()
 			log.Printf("check wechat is alive: recent message id %d, current message id %d\n", p.recentMessageId, currentMaxMessageId)
 			if currentMaxMessageId == p.recentMessageId {

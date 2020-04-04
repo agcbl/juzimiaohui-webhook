@@ -100,11 +100,7 @@ Support version
 [alive]
 tick = 10
 limit = 3
-start_at = 2
-end_at = 6
 ```
 
 - tick: how frequency to check alive
 - limit: check limit
-- start_at: Check start at
-- end_at: Check end at

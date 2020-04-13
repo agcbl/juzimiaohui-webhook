@@ -44,7 +44,8 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 			Text:  &feishuModel.TextModule{Tag: "plain_text", Content: "获取用户前 10 条消息"},
 			Value: make(map[string]string),
 		}
-		prevButton.SetValue("wxid", message.ContactId)
+		prevButton.SetValue("wx_id", message.ContactId)
+		prevButton.SetValue("room_id", message.RoomId)
 		prevButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 
 		nextButton := feishuModel.ButtonModule{
@@ -52,7 +53,8 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 			Text:  &feishuModel.TextModule{Tag: "plain_text", Content: "获取用户后 10 条消息"},
 			Value: make(map[string]string),
 		}
-		nextButton.SetValue("wxid", message.ContactId)
+		nextButton.SetValue("wx_id", message.ContactId)
+		nextButton.SetValue("room_id", message.RoomId)
 		nextButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 
 		actionModule := &feishuModel.ActionModule{

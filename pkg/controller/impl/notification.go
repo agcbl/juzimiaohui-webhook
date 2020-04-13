@@ -47,6 +47,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		prevButton.SetValue("wx_id", message.ContactId)
 		prevButton.SetValue("room_id", message.RoomId)
 		prevButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
+		prevButton.SetValue("direction", "before")
 
 		nextButton := feishuModel.ButtonModule{
 			Tag:   "button",
@@ -56,6 +57,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		nextButton.SetValue("wx_id", message.ContactId)
 		nextButton.SetValue("room_id", message.RoomId)
 		nextButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
+		nextButton.SetValue("direction", "after")
 
 		actionModule := &feishuModel.ActionModule{
 			Tag:     "action",

@@ -36,7 +36,7 @@ func NewNotificationController() *NotificationControllerImpl {
 		keywordController:keywordController, feishuMessageApi: feishuMessageApi, feishuImageApi: feishuImageApi}
 }
 
-func (p *NotificationControllerImpl) CreateMessageCard(message model.WechatMessage) {
+func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMessage) {
 	imageResp, err := p.feishuImageApi.UploadFromUri(message.Payload.ImageUrl)
 	if err == nil && imageResp.Data != nil {
 		prevButton := feishuModel.ButtonModule{

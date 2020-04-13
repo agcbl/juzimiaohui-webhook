@@ -35,7 +35,7 @@ type Alive struct {
 type LarkBot struct {
 	AppID string `toml:"app_id"`
 	AppSecret string `toml:"app_secret"`
-	EndPoint string `toml:"end_point"`
+	EndPoint string `toml:"endpoint"`
 	ChatID string `toml:"chat_id"`
 }
 

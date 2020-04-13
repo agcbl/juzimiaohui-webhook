@@ -97,8 +97,12 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 			}
 		}
 		impl.DefaultWechatMessageDAO.Create(wechatMessage)
-		p.notificationController.CreateNotification(
-			wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())
+		if wechatMessage.Type == model.Image {
+
+		} else {
+			p.notificationController.CreateNotification(
+				wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())
+		}
 		p.recordActive(wechatMessage)
 	}
 }

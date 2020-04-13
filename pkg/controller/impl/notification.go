@@ -4,23 +4,64 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/fatelei/go-feishu/pkg/message"
+	"github.com/fatelei/go-feishu/pkg/image"
+	feishuModel "github.com/fatelei/go-feishu/pkg/model/interactive"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
+	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
 )
 
 type NotificationControllerImpl struct {
 	keywordController *KeywordControllerImpl
+	feishuMessageApi *message.MessageAPI
+	feishuImageApi *image.ImageAPI
 }
 
 var _ controller.NotificationController = (*NotificationControllerImpl)(nil)
 
 func NewNotificationController() *NotificationControllerImpl {
 	keywordController := NewKeywordController()
-	return &NotificationControllerImpl{keywordController:keywordController}
+	feishuMessageApi := message.NewMessageAPI(
+		configs.DefaultConfig.LarkBot.AppID, configs.DefaultConfig.LarkBot.AppSecret, configs.DefaultConfig.LarkBot.EndPoint)
+	feishuImageApi := image.NewImageAPI(
+		configs.DefaultConfig.LarkBot.AppID, configs.DefaultConfig.LarkBot.AppSecret, configs.DefaultConfig.LarkBot.EndPoint)
+	return &NotificationControllerImpl{
+		keywordController:keywordController, feishuMessageApi: feishuMessageApi, feishuImageApi: feishuImageApi}
+}
+
+func (p *NotificationControllerImpl) CreateMessageCard(message model.WechatMessage) {
+	imageResp, err := p.feishuImageApi.UploadFromUri(message.Payload.ImageUrl)
+	if err == nil && imageResp.Data != nil {
+		prevButton := feishuModel.ButtonModule{
+			Tag:   "button",
+			Text:  &feishuModel.TextModule{Tag: "plain_text", Content: "获取用户前 10 条消息"},
+			Value: make(map[string]string),
+		}
+		prevButton.SetValue("wxid", message.ContactId)
+		prevButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
+
+		nextButton := feishuModel.ButtonModule{
+			Tag:   "button",
+			Text:  &feishuModel.TextModule{Tag: "plain_text", Content: "获取用户后 10 条消息"},
+			Value: make(map[string]string),
+		}
+		nextButton.SetValue("wxid", message.ContactId)
+		nextButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
+
+		actionModule := &feishuModel.ActionModule{
+			Tag:     "action",
+			Actions: []feishuModel.Interactive{prevButton, nextButton},
+		}
+		title := fmt.Sprintf("%s-%s-%s-%s-%s", message.ContactId, message.ContactName, message.RoomTopic, message.RoomId, time.Now().Format("2006-01-02 15:04:05"))
+		p.feishuMessageApi.SendImage(configs.DefaultConfig.LarkBot.ChatID, title, imageResp.Data.ImageKey, actionModule)
+	}
 }
 
 

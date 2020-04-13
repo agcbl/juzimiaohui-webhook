@@ -17,3 +17,8 @@ sync_timer = 5
 [alive]
 tick = 10
 limit = 3
+
+[lark_bot]
+app_id = "app_id"
+app_secret = "app_secret"
+endpoint = "end_point"

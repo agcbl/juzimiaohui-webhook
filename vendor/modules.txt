@@ -1,5 +1,15 @@
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/fatelei/go-feishu v0.0.0-20200412143534-2e042eb03640
+github.com/fatelei/go-feishu/pkg/auth
+github.com/fatelei/go-feishu/pkg/message
+github.com/fatelei/go-feishu/pkg/model
+github.com/fatelei/go-feishu/pkg/model/interactive
+github.com/fatelei/go-feishu/pkg/transport
+# github.com/fatelei/juzihudong-sdk v0.0.0-20200328102527-9d544ca51c43
+github.com/fatelei/juzihudong-sdk/pkg/juzihudong
+github.com/fatelei/juzihudong-sdk/pkg/model
+github.com/fatelei/juzihudong-sdk/pkg/transport
 # github.com/gin-contrib/sse v0.1.0
 github.com/gin-contrib/sse
 # github.com/gin-gonic/gin v1.5.0
@@ -16,6 +26,8 @@ github.com/go-playground/universal-translator
 github.com/go-sql-driver/mysql
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
+# github.com/iohub/ahocorasick v0.0.0-20190713143823-b7bfd8ad9e27
+github.com/iohub/ahocorasick
 # github.com/json-iterator/go v1.1.7
 github.com/json-iterator/go
 # github.com/leodido/go-urn v1.1.0

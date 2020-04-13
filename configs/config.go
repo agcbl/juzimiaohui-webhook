@@ -32,12 +32,20 @@ type Alive struct {
 	EndAt int `toml:"end_at"`
 }
 
+type LarkBot struct {
+	AppID string `toml:"app_id"`
+	AppSecret string `toml:"app_secret"`
+	EndPoint string `toml:"end_point"`
+	ChatID string `toml:"chat_id"`
+}
+
 type Config struct {
 	Database *Database
 	Lark *LarkBotPath
 	Juzihudong *Juzihudong
 	Keyword *Keyword
 	Alive *Alive
+	LarkBot *LarkBot `toml:"lark_bot"`
 }
 
 var DefaultConfig Config

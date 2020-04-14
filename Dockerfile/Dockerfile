@@ -3,6 +3,7 @@ LABEL maintainer="fatelei@gmail.com"
 LABEL version="1.0"
 LABEL description="juzhimiaohui webhook"
 RUN mkdir -p $GOPATH/src/github.com/fatelei
+RUN go env -w GOPROXY=https://goproxy.cn
 ARG CACHEBUST=1
 RUN cd $GOPATH/src/github.com/fatelei && git clone https://github.com/fatelei/juzimiaohui-webhook.git
 WORKDIR $GOPATH/src/github.com/fatelei/juzimiaohui-webhook

@@ -6,8 +6,10 @@ github.com/cloudflare/ahocorasick v0.0.0-20131126104932-1ce46e42b741/go.mod h1:t
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/fatelei/go-feishu v0.0.0-20200412143534-2e042eb03640 h1:cktBC8Ed/BCpzrqhCdI6sL54ZJVIeS/9QqnTVLdLJP4=
-github.com/fatelei/go-feishu v0.0.0-20200412143534-2e042eb03640/go.mod h1:zsIGFq41zMZOHJ7T5CbCG43CJUqG5CSGU8BfS2MvOhI=
+github.com/fatelei/go-feishu v1.0.2 h1:u8zt4Z7Nf197+mV4cZ26lUlm0po3ziZvdYzlUR692HE=
+github.com/fatelei/go-feishu v1.0.2/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
+github.com/fatelei/go-feishu v1.0.3 h1:u84xRA6JfUum1vFAM5RRTQwherxPb0OR/GSZYo175Ag=
+github.com/fatelei/go-feishu v1.0.3/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
 github.com/fatelei/juzihudong-sdk v0.0.0-20200328102527-9d544ca51c43 h1:yEuagNkdkxw+LVNnPBUkIBC+KhnRd1FE6GXLnERJ9KM=
 github.com/fatelei/juzihudong-sdk v0.0.0-20200328102527-9d544ca51c43/go.mod h1:jCxJ0GHpy6wWUuzovMQBi1BP/XtnhUAS+7WaOUDZFMU=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=

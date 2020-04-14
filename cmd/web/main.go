@@ -27,7 +27,7 @@ func main() {
 	configs.NewConfig(configFile)
 	connection.InitDB()
 	engine := web.Routes()
-	err := engine.Run(fmt.Sprintf(":%d", port))
+	err = engine.Run(fmt.Sprintf(":%d", port))
 	if err != nil {
 		panic(err)
 	}

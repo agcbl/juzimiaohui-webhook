@@ -19,7 +19,8 @@ import (
 )
 
 type NotificationControllerImpl struct {
-	keywordController *KeywordControllerImpl
+	keywordController controller.KeywordController
+	feishuBotController controller.FeishuBotController
 	feishuMessageApi *message.MessageAPI
 	feishuImageApi *image.ImageAPI
 }
@@ -28,16 +29,16 @@ var _ controller.NotificationController = (*NotificationControllerImpl)(nil)
 
 func NewNotificationController() *NotificationControllerImpl {
 	keywordController := NewKeywordController()
-	feishuMessageApi := message.NewMessageAPI(
-		configs.DefaultConfig.LarkBot.AppID, configs.DefaultConfig.LarkBot.AppSecret, configs.DefaultConfig.LarkBot.EndPoint)
-	feishuImageApi := image.NewImageAPI(
-		configs.DefaultConfig.LarkBot.AppID, configs.DefaultConfig.LarkBot.AppSecret, configs.DefaultConfig.LarkBot.EndPoint)
+	feishuBotController := NewFeishuBotController()
+	feishuMessageApi := message.NewMessageAPI(configs.DefaultConfig.LarkBot.EndPoint)
+	feishuImageApi := image.NewImageAPI(configs.DefaultConfig.LarkBot.EndPoint)
 	return &NotificationControllerImpl{
-		keywordController:keywordController, feishuMessageApi: feishuMessageApi, feishuImageApi: feishuImageApi}
+		keywordController:keywordController, feishuMessageApi: feishuMessageApi, feishuImageApi: feishuImageApi, feishuBotController: feishuBotController}
 }
 
 func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMessage) {
-	imageResp, err := p.feishuImageApi.UploadFromUri(message.Payload.ImageUrl)
+	accessToken := p.feishuBotController.GetAccessToken()
+	imageResp, err := p.feishuImageApi.UploadFromUri(message.Payload.ImageUrl, accessToken)
 	if err == nil && imageResp.Data != nil {
 		prevButton := feishuModel.ButtonModule{
 			Tag:   "button",
@@ -64,7 +65,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 			Actions: []feishuModel.Interactive{prevButton, nextButton},
 		}
 		title := fmt.Sprintf("%s-%s-%s-%s-%s", message.ContactId, message.ContactName, message.RoomTopic, message.RoomId, time.Now().Format("2006-01-02 15:04:05"))
-		p.feishuMessageApi.SendImage(configs.DefaultConfig.LarkBot.ChatID, title, imageResp.Data.ImageKey, actionModule)
+		p.feishuMessageApi.SendImage(configs.DefaultConfig.LarkBot.ChatID, title, imageResp.Data.ImageKey, actionModule, accessToken)
 	}
 }
 

@@ -49,3 +49,10 @@ CREATE TABLE `keyword` (
     PRIMARY KEY (`id`),
     UNIQUE `idx_word` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `feishu_bot` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `token` VARCHAR(100) NOT NULL,
+    `expire` BIGINT(11),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

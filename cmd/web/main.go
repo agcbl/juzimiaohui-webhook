@@ -7,6 +7,7 @@ import (
 	"github.com/fatelei/juzimiaohui-webhook/pkg/connection"
 	"github.com/fatelei/juzimiaohui-webhook/web"
 	"log"
+	"time"
 )
 
 func main() {
@@ -18,6 +19,11 @@ func main() {
 	flag.StringVar(&configFile,"config", "/etc/webhook.toml", "webhook config path")
 	flag.Parse()
 
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		panic(err)
+	}
+	time.Local = loc
 	configs.NewConfig(configFile)
 	connection.InitDB()
 	engine := web.Routes()

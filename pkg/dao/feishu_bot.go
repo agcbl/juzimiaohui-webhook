@@ -1,9 +1,12 @@
 package dao
 
+import "time"
+
 type FeishuBotRecord struct {
 	ID int64
 	Token string
 	Expire int64
+	CreatedAt time.Time
 }
 
 type FeishuBotDAO interface {

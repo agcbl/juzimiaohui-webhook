@@ -27,7 +27,7 @@ func (p *FeishuBotControllerImpl) GetAccessToken() string {
 		impl.DefaultFeishuBotDAO.Create(accessToken.Token, accessToken.Expire)
 		return accessToken.Token
 	} else {
-		if time.Now().Unix() - record.Expire <= 10 {
+		if time.Now().Unix() - record.CreatedAt.Unix() > record.Expire {
 			accessToken := p.auth.GetAccessToken()
 			impl.DefaultFeishuBotDAO.Refresh(record.ID, accessToken.Token, accessToken.Expire)
 			return accessToken.Token

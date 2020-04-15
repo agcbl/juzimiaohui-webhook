@@ -37,6 +37,7 @@ type LarkBot struct {
 	AppSecret string `toml:"app_secret"`
 	EndPoint string `toml:"endpoint"`
 	ChatID string `toml:"chat_id"`
+	Token string `toml:"token"`
 }
 
 type Config struct {

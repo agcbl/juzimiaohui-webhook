@@ -9,6 +9,7 @@ import (
 	feishuModel "github.com/fatelei/go-feishu/pkg/model/interactive"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
+	"github.com/fatelei/juzimiaohui-webhook/pkg/dao"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
 	"io/ioutil"
 	"log"
@@ -66,6 +67,25 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		}
 		title := fmt.Sprintf("%s-%s-%s-%s-%s", message.ContactId, message.ContactName, message.RoomTopic, message.RoomId, time.Now().Format("2006-01-02 15:04:05"))
 		p.feishuMessageApi.SendImage(configs.DefaultConfig.LarkBot.ChatID, title, imageResp.Data.ImageKey, actionModule, accessToken)
+	}
+}
+
+func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.WechatMessage) {
+	accessToken := p.feishuBotController.GetAccessToken()
+	if len(messages) > 0 {
+		elements := make([]interface{}, len(messages))
+		var title string
+		for index, item := range messages {
+			if len(title) == 0 {
+				title = fmt.Sprintf("%s（%s）在群「%s」中说：", item.WxID, item.WechatName, item.RoomName)
+			}
+			element := &feishuModel.TextModule{
+				Tag:     "plain_text",
+				Content: fmt.Sprintf("%s", item.Content),
+			}
+			elements[index] = element
+		}
+		p.feishuMessageApi.SendInteractiveCard(configs.DefaultConfig.LarkBot.ChatID, title, elements, accessToken)
 	}
 }
 

@@ -7,6 +7,7 @@ import (
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao/impl"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -18,7 +19,6 @@ type WechatMessageControllerImpl struct {
 	duplicateCount int
 }
 var _ controller.WechatMessageController = (*WechatMessageControllerImpl)(nil)
-
 
 func NewWechatMessageController() *WechatMessageControllerImpl {
 	contactApi := juzihudong.NewContactApi(configs.DefaultConfig.Juzihudong.Endpoint, configs.DefaultConfig.Juzihudong.Token)
@@ -105,6 +105,14 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 		}
 		p.recordActive(wechatMessage)
 	}
+}
+
+func (p *WechatMessageControllerImpl) GetRecentMessages(wxid string, roomId string, createdAt string, direction string) {
+	timestamp, _ := strconv.Atoi(createdAt)
+	tm := time.Unix(int64(timestamp), 0)
+	createdAtStr := tm.Format("2006-01-02 15:04:05")
+	messages := impl.DefaultWechatMessageDAO.GetRecentMessages(wxid, roomId, createdAtStr, direction)
+	p.notificationController.SendRecentMessagesCard(messages)
 }
 
 

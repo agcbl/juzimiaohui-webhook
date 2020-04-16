@@ -114,7 +114,12 @@ func (p *WechatMessageControllerImpl) GetRecentMessages(wxid string, roomId stri
 	createdAtStr := tm.Format("2006-01-02 15:04:05")
 	fmt.Printf("%s\n", createdAtStr)
 	messages := impl.DefaultWechatMessageDAO.GetRecentMessages(wxid, roomId, createdAtStr, direction)
-	p.notificationController.SendRecentMessagesCard(messages)
+	resp, err := p.notificationController.SendRecentMessagesCard(messages)
+	if err != nil {
+		log.Printf("%+v\n", err)
+	} else {
+		log.Printf("%+v\n", resp)
+	}
 }
 
 

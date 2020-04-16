@@ -79,9 +79,12 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.Wech
 			if len(title) == 0 {
 				title = fmt.Sprintf("%s（%s）在群「%s」中说：", item.WxID, item.WechatName, item.RoomName)
 			}
-			element := &feishuModel.TextModule{
-				Tag:     "plain_text",
-				Content: fmt.Sprintf("%s", item.Content),
+			element := &feishuModel.ContentModule{
+				Tag:     "div",
+				Text: &feishuModel.TextModule{
+					Tag:     "plain_text",
+					Content:  fmt.Sprintf("%s", item.Content),
+				},
 			}
 			elements[index] = element
 		}

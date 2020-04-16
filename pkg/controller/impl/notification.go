@@ -85,7 +85,12 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.Wech
 			}
 			elements[index] = element
 		}
-		p.feishuMessageApi.SendInteractiveCard(configs.DefaultConfig.LarkBot.ChatID, title, elements, accessToken)
+		resp, err := p.feishuMessageApi.SendInteractiveCard(configs.DefaultConfig.LarkBot.ChatID, title, elements, accessToken)
+		if err != nil {
+			log.Printf("%+v\n", err)
+		} else {
+			log.Printf("%+v\n", resp)
+		}
 	}
 }
 

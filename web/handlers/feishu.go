@@ -44,7 +44,8 @@ func (p *FeishuCallback) Callback(c *gin.Context) {
 			}
 		}
 	}
-
+	log.Printf("%+v\n", data)
+	log.Printf("%+v\n", data["action"])
 	if action, ok := data["action"]; ok {
 		if valueMap, ok := action.(map[string]interface{}); ok {
 			wxid, _ := valueMap["wx_id"]

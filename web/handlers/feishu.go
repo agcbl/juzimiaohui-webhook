@@ -47,11 +47,11 @@ func (p *FeishuCallback) Callback(c *gin.Context) {
 	if action, ok := data["action"]; ok {
 		if actionMap, ok := action.(map[string]interface{}); ok {
 			log.Printf("%+v\n", actionMap["value"])
-			if valueMap, ok := actionMap["value"].(map[string]string); ok {
-				wxid, _ := valueMap["wx_id"]
-				roomID, _ := valueMap["room_id"]
-				createdAt, _ := valueMap["timestamp"]
-				direction, _ := valueMap["direction"]
+			if valueMap, ok := actionMap["value"].(map[string]interface{}); ok {
+				wxid, _ := valueMap["wx_id"].(string)
+				roomID, _ := valueMap["room_id"].(string)
+				createdAt, _ := valueMap["timestamp"].(string)
+				direction, _ := valueMap["direction"].(string)
 				if len(wxid) > 0 && len(roomID) > 0 && len(createdAt) > 0 && len(direction) > 0 {
 					p.wechatMessageController.GetRecentMessages(wxid, roomID, createdAt, direction)
 				}

@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"fmt"
 	"github.com/fatelei/juzihudong-sdk/pkg/juzihudong"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
@@ -109,8 +110,9 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 
 func (p *WechatMessageControllerImpl) GetRecentMessages(wxid string, roomId string, createdAt string, direction string) {
 	timestamp, _ := strconv.Atoi(createdAt)
-	tm := time.Unix(int64(timestamp), 0)
+	tm := time.Unix(int64(timestamp/1000), 0)
 	createdAtStr := tm.Format("2006-01-02 15:04:05")
+	fmt.Printf("%s\n", createdAtStr)
 	messages := impl.DefaultWechatMessageDAO.GetRecentMessages(wxid, roomId, createdAtStr, direction)
 	p.notificationController.SendRecentMessagesCard(messages)
 }

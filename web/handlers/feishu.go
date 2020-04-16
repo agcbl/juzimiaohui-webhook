@@ -44,21 +44,17 @@ func (p *FeishuCallback) Callback(c *gin.Context) {
 			}
 		}
 	}
-	log.Printf("%+v\n", data)
-	log.Printf("%+v\n", data["action"])
 	if action, ok := data["action"]; ok {
-		if valueMap, ok := action.(map[string]interface{}); ok {
-			wxid, _ := valueMap["wx_id"]
-			roomID, _ := valueMap["room_id"]
-			createdAt, _ := valueMap["timestamp"]
-			direction, _ := valueMap["direction"]
-
-			strWxid, _ := wxid.(string)
-			strRoomID, _ := roomID.(string)
-			strCreatedAt, _ := createdAt.(string)
-			strDirection, _ := direction.(string)
-			if len(strWxid) > 0 && len(strRoomID) > 0 && len(strCreatedAt) > 0 && len(strDirection) > 0 {
-				p.wechatMessageController.GetRecentMessages(strWxid, strRoomID, strCreatedAt, strDirection)
+		if actionMap, ok := action.(map[string]interface{}); ok {
+			log.Printf("%+v\n", actionMap["value"])
+			if valueMap, ok := actionMap["value"].(map[string]string); ok {
+				wxid, _ := valueMap["wx_id"]
+				roomID, _ := valueMap["room_id"]
+				createdAt, _ := valueMap["timestamp"]
+				direction, _ := valueMap["direction"]
+				if len(wxid) > 0 && len(roomID) > 0 && len(createdAt) > 0 && len(direction) > 0 {
+					p.wechatMessageController.GetRecentMessages(wxid, roomID, createdAt, direction)
+				}
 			}
 		}
 	}

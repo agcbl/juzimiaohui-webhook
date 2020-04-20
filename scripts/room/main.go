@@ -6,37 +6,29 @@ import (
 	"github.com/fatelei/juzihudong-sdk/pkg/juzihudong"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/connection"
-	"github.com/fatelei/juzimiaohui-webhook/pkg/controller/impl"
-	"log"
 )
 
 
 func main() {
-	var endpoint string
-	var token string
 	var configFile string
+	var roomID string
 	flag.StringVar(&configFile,"config", "/etc/webhook.toml", "webhook config path")
-	flag.StringVar(&endpoint, "endpoint", "https://ex-api.botorange.com", "api endpoint")
-	flag.StringVar(&token, "token", "","api token")
+	flag.StringVar(&roomID,"wxid", "", "room id")
 	flag.Parse()
 
 	configs.NewConfig(configFile)
 	connection.InitDB()
-	if len(token) == 0 {
-		fmt.Println("token is required")
-		return
-	}
-	roomApi := juzihudong.NewRoomApi(endpoint, token)
-	current := 106
+	roomApi := juzihudong.NewRoomApi(configs.DefaultConfig.Juzihudong.Endpoint, configs.DefaultConfig.Juzihudong.Token)
+	current := 0
 
 	for ;; {
-		log.Printf("sync room, page = %d\n", current)
-		resp := roomApi.GetRooms(current, 10)
+		resp := roomApi.GetRooms(current, 10, roomID)
 		if len(*resp.Data) == 0 {
 			break
-		} else {
-			for _, room := range *resp.Data {
-				impl.DefaultWechatRoomController.CreateRoom(&room)
+		}
+		for _, room := range *resp.Data {
+			for _, member := range *room.Members {
+				fmt.Printf("%s\n", member.Wxid)
 			}
 		}
 		current += 1

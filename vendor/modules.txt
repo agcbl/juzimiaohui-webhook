@@ -1,13 +1,13 @@
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
-# github.com/fatelei/go-feishu v1.0.6
+# github.com/fatelei/go-feishu v1.0.7
 github.com/fatelei/go-feishu/pkg/auth
 github.com/fatelei/go-feishu/pkg/image
 github.com/fatelei/go-feishu/pkg/message
 github.com/fatelei/go-feishu/pkg/model
 github.com/fatelei/go-feishu/pkg/model/interactive
 github.com/fatelei/go-feishu/pkg/transport
-# github.com/fatelei/juzihudong-sdk v0.0.0-20200328102527-9d544ca51c43
+# github.com/fatelei/juzihudong-sdk v1.0.0
 github.com/fatelei/juzihudong-sdk/pkg/juzihudong
 github.com/fatelei/juzihudong-sdk/pkg/model
 github.com/fatelei/juzihudong-sdk/pkg/transport

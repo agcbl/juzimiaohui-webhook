@@ -24,10 +24,13 @@ type RoomListReponse struct {
 }
 
 
-func (p *RoomApi) GetRooms(current int, pageSize int) *RoomListReponse {
+func (p *RoomApi) GetRooms(current int, pageSize int, wxid string) *RoomListReponse {
 	param := make(map[string]string)
 	param["current"] = strconv.Itoa(current)
 	param["pageSize"] = strconv.Itoa(pageSize)
+	if len(wxid) > 0 {
+		param["wxid"] = wxid
+	}
 	body, err := p.Transport.Get("/room/list", &param)
 	if err != nil {
 		panic(err)

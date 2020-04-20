@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/fatelei/go-feishu/pkg/message"
 	"github.com/fatelei/go-feishu/pkg/image"
+	"github.com/fatelei/go-feishu/pkg/message"
 	feishuModel "github.com/fatelei/go-feishu/pkg/model/interactive"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
@@ -20,10 +20,10 @@ import (
 )
 
 type NotificationControllerImpl struct {
-	keywordController controller.KeywordController
+	keywordController   controller.KeywordController
 	feishuBotController controller.FeishuBotController
-	feishuMessageApi *message.MessageAPI
-	feishuImageApi *image.ImageAPI
+	feishuMessageApi    *message.MessageAPI
+	feishuImageApi      *image.ImageAPI
 }
 
 var _ controller.NotificationController = (*NotificationControllerImpl)(nil)
@@ -34,7 +34,7 @@ func NewNotificationController() *NotificationControllerImpl {
 	feishuMessageApi := message.NewMessageAPI(configs.DefaultConfig.LarkBot.EndPoint)
 	feishuImageApi := image.NewImageAPI(configs.DefaultConfig.LarkBot.EndPoint)
 	return &NotificationControllerImpl{
-		keywordController:keywordController, feishuMessageApi: feishuMessageApi, feishuImageApi: feishuImageApi, feishuBotController: feishuBotController}
+		keywordController: keywordController, feishuMessageApi: feishuMessageApi, feishuImageApi: feishuImageApi, feishuBotController: feishuBotController}
 }
 
 func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMessage) {
@@ -80,10 +80,10 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.Wech
 				title = fmt.Sprintf("%s（%s）在群「%s」中说：", item.WxID, item.WechatName, item.RoomName)
 			}
 			element := &feishuModel.ContentModule{
-				Tag:     "div",
+				Tag: "div",
 				Text: &feishuModel.TextModule{
 					Tag:     "plain_text",
-					Content:  fmt.Sprintf("%s", item.Content),
+					Content: fmt.Sprintf("%s %s", item.CreatedAt.Format("2006-01-02 15:04:05"), item.Content),
 				},
 			}
 			elements[index] = element
@@ -97,7 +97,6 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.Wech
 	}
 }
 
-
 func (p *NotificationControllerImpl) CreateNotification(room string, contactName string, contactId string, content string) {
 	var body []byte
 	var err error
@@ -109,13 +108,13 @@ func (p *NotificationControllerImpl) CreateNotification(room string, contactName
 		index := strings.Index(content, hitWord)
 		var sendContent string
 		if index != -1 {
-			sendContent = fmt.Sprintf("%s『%s』%s", content[:index], hitWord, content[index + len(hitWord):])
+			sendContent = fmt.Sprintf("%s『%s』%s", content[:index], hitWord, content[index+len(hitWord):])
 		} else {
 			sendContent = content
 		}
 		body, err = json.Marshal(map[string]string{
 			"title": fmt.Sprintf("%s（%s）在群「%s」中说：", contactName, contactId, room),
-			"text": fmt.Sprintf("%s", sendContent),
+			"text":  fmt.Sprintf("%s", sendContent),
 		})
 		if err != nil {
 			panic(err)
@@ -146,7 +145,7 @@ func (p *NotificationControllerImpl) CreateWechatDeathNoti() {
 	if configs.DefaultConfig.Lark != nil {
 		body, err = json.Marshal(map[string]string{
 			"title": "最近 30 分钟内无消息",
-			"text": "请尽快检查绑定微信是否下线，如果已下线请尽快前往<a href=\"https://wechat.botorange.com/\">句子互动</a>后台重新登录",
+			"text":  "请尽快检查绑定微信是否下线，如果已下线请尽快前往<a href=\"https://wechat.botorange.com/\">句子互动</a>后台重新登录",
 		})
 		if err != nil {
 			panic(err)

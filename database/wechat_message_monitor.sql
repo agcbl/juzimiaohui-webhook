@@ -56,3 +56,10 @@ CREATE TABLE `feishu_bot` (
     `expire` BIGINT(11),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `wechat_whitelist` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `wxid` VARCHAR(1024) DEFAULT "",
+    PRIMARY KEY (`id`),
+    KEY `idx_wxid` (`wxid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

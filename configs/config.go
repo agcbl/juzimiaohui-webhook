@@ -40,6 +40,10 @@ type LarkBot struct {
 	Token string `toml:"token"`
 }
 
+type WhiteList struct {
+	RoomID string `toml:"room_id"`
+}
+
 type Config struct {
 	Database *Database
 	Lark *LarkBotPath
@@ -47,6 +51,7 @@ type Config struct {
 	Keyword *Keyword
 	Alive *Alive
 	LarkBot *LarkBot `toml:"lark_bot"`
+	WhiteList *WhiteList `toml:"whitelist"`
 }
 
 var DefaultConfig Config

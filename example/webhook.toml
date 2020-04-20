@@ -22,3 +22,6 @@ limit = 3
 app_id = "app_id"
 app_secret = "app_secret"
 endpoint = "end_point"
+
+[whitelist]
+room_id = "room_id"

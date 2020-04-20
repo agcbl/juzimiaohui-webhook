@@ -12,8 +12,12 @@ github.com/fatelei/go-feishu v1.0.5 h1:uvkuZKPtTZUkq8HcciKBUk2xNYduLyPszJGSRFdoo
 github.com/fatelei/go-feishu v1.0.5/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
 github.com/fatelei/go-feishu v1.0.6 h1:RjAIeZJlJGlB48MIcfEBcHeVRMrEXmzC8wPdyer+SWc=
 github.com/fatelei/go-feishu v1.0.6/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
+github.com/fatelei/go-feishu v1.0.7 h1:WQZVpVa4uQG/yxiueQ0mY8A/L7tOQalUPcj90hLabmM=
+github.com/fatelei/go-feishu v1.0.7/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
 github.com/fatelei/juzihudong-sdk v0.0.0-20200328102527-9d544ca51c43 h1:yEuagNkdkxw+LVNnPBUkIBC+KhnRd1FE6GXLnERJ9KM=
 github.com/fatelei/juzihudong-sdk v0.0.0-20200328102527-9d544ca51c43/go.mod h1:jCxJ0GHpy6wWUuzovMQBi1BP/XtnhUAS+7WaOUDZFMU=
+github.com/fatelei/juzihudong-sdk v1.0.0 h1:0dt7Uab+lwE3oRdstEZlv54SJk/pWhNfyC8oK6CsDKM=
+github.com/fatelei/juzihudong-sdk v1.0.0/go.mod h1:g3j8E8T9DLcdiGE2FWUCuqmpEIT4QkVj+9o+sLSsEkc=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
 github.com/gin-contrib/sse v0.1.0/go.mod h1:RHrZQHXnP2xjPF+u1gW/2HnVO7nvIa9PG3Gm+fLHvGI=
 github.com/gin-gonic/gin v1.5.0 h1:fi+bqFAx/oLK54somfCtEZs9HeH1LHVoEPUgARpTqyc=

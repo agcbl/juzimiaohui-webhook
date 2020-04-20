@@ -5,6 +5,7 @@ import (
 	"github.com/fatelei/juzimiaohui-webhook/pkg/connection"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
+	"sort"
 )
 
 type WechatMessageDAOImpl struct {}
@@ -55,7 +56,7 @@ func (p *WechatMessageDAOImpl) GetRecentMessages(wxid string, roomId string, cre
 	if direction == "before" {
 		stmtQuery, err = connection.DB.Prepare(
 			`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
-	WHERE wxid = ? AND room_id = ? AND created_at <= ? order by id asc limit 10`)
+	WHERE wxid = ? AND room_id = ? AND created_at <= ? order by desc limit 10`)
 	} else {
 		stmtQuery, err = connection.DB.Prepare(
 			`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
@@ -77,5 +78,8 @@ func (p *WechatMessageDAOImpl) GetRecentMessages(wxid string, roomId string, cre
 		rows.Scan(&tmp.ID, &tmp.WxID, &tmp.WechatName, &tmp.RoomName, &tmp.Content, &tmp.MsgType, &tmp.CreatedAt, &tmp.RoomID, &tmp.MessageID)
 		results = append(results, tmp)
 	}
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].CreatedAt.Unix() < results[j].CreatedAt.Unix()
+	})
 	return results
 }

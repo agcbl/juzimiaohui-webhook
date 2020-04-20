@@ -1,6 +1,6 @@
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
-# github.com/fatelei/go-feishu v1.0.7
+# github.com/fatelei/go-feishu v1.0.8
 github.com/fatelei/go-feishu/pkg/auth
 github.com/fatelei/go-feishu/pkg/image
 github.com/fatelei/go-feishu/pkg/message

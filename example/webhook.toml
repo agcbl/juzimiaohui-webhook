@@ -22,6 +22,13 @@ limit = 3
 app_id = "app_id"
 app_secret = "app_secret"
 endpoint = "end_point"
+token = "token"
+
+[lark_picture_room]
+chat_id = "chat_id"
+
+[lark_text_room]
+chat_id = "chat_id"
 
 [whitelist]
 room_id = "room_id"

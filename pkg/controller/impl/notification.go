@@ -50,6 +50,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		prevButton.SetValue("room_id", message.RoomId)
 		prevButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 		prevButton.SetValue("direction", "before")
+		prevButton.SetValue("chat_id", configs.DefaultConfig.LarkPictureRoom.ChatID)
 
 		nextButton := feishuModel.ButtonModule{
 			Tag:   "button",
@@ -60,17 +61,19 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		nextButton.SetValue("room_id", message.RoomId)
 		nextButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 		nextButton.SetValue("direction", "after")
+		nextButton.SetValue("chat_id", configs.DefaultConfig.LarkPictureRoom.ChatID)
 
 		actionModule := &feishuModel.ActionModule{
 			Tag:     "action",
 			Actions: []feishuModel.Interactive{prevButton, nextButton},
 		}
 		title := fmt.Sprintf("%s-%s-%s-%s-%s", message.ContactId, message.ContactName, message.RoomTopic, message.RoomId, time.Now().Format("2006-01-02 15:04:05"))
-		p.feishuMessageApi.SendImage(configs.DefaultConfig.LarkBot.ChatID, title, imageResp.Data.ImageKey, actionModule, accessToken)
+		p.feishuMessageApi.SendImage(
+			configs.DefaultConfig.LarkPictureRoom.ChatID, title, imageResp.Data.ImageKey, actionModule, accessToken)
 	}
 }
 
-func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.WechatMessage) {
+func (p *NotificationControllerImpl) SendRecentMessagesCard(chatID string, messages []*dao.WechatMessage) {
 	accessToken := p.feishuBotController.GetAccessToken()
 	if len(messages) > 0 {
 		elements := make([]interface{}, len(messages))
@@ -88,7 +91,7 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.Wech
 			}
 			elements[index] = element
 		}
-		resp, err := p.feishuMessageApi.SendInteractiveCard(configs.DefaultConfig.LarkBot.ChatID, title, elements, accessToken)
+		resp, err := p.feishuMessageApi.SendInteractiveCard(chatID, title, elements, accessToken)
 		if err != nil {
 			log.Printf("%+v\n", err)
 		} else {
@@ -97,42 +100,61 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(messages []*dao.Wech
 	}
 }
 
-func (p *NotificationControllerImpl) CreateNotification(room string, contactName string, contactId string, content string) {
-	var body []byte
-	var err error
-	var rst []byte
-	var resp *http.Response
+func (p *NotificationControllerImpl) CreateNotification(wechatMessage *model.WechatMessage) {
+	content := wechatMessage.GetContent()
 	hitWord := p.keywordController.Search(content)
 	fmt.Printf("hit words: %s\n", hitWord)
 	if len(hitWord) > 0 && configs.DefaultConfig.Lark != nil {
 		index := strings.Index(content, hitWord)
 		var sendContent string
+
+		prevButton := feishuModel.ButtonModule{
+			Tag:   "button",
+			Text:  &feishuModel.TextModule{Tag: "plain_text", Content: "获取该群前 10 条消息"},
+			Value: make(map[string]string),
+		}
+		prevButton.SetValue("wx_id", "")
+		prevButton.SetValue("room_id", wechatMessage.RoomId)
+		prevButton.SetValue("timestamp", strconv.Itoa(wechatMessage.Timestamp))
+		prevButton.SetValue("direction", "before")
+		prevButton.SetValue("chat_id", configs.DefaultConfig.LarkTextRoom.ChatID)
+
+		nextButton := feishuModel.ButtonModule{
+			Tag:   "button",
+			Text:  &feishuModel.TextModule{Tag: "plain_text", Content: "获取该群后 10 条消息"},
+			Value: make(map[string]string),
+		}
+		nextButton.SetValue("wx_id", "")
+		nextButton.SetValue("room_id", wechatMessage.RoomId)
+		nextButton.SetValue("timestamp", strconv.Itoa(wechatMessage.Timestamp))
+		nextButton.SetValue("direction", "after")
+		nextButton.SetValue("chat_id", configs.DefaultConfig.LarkTextRoom.ChatID)
+
+		actionModule := &feishuModel.ActionModule{
+			Tag:     "action",
+			Actions: []feishuModel.Interactive{prevButton, nextButton},
+		}
 		if index != -1 {
 			sendContent = fmt.Sprintf("%s『%s』%s", content[:index], hitWord, content[index+len(hitWord):])
 		} else {
 			sendContent = content
 		}
-		body, err = json.Marshal(map[string]string{
-			"title": fmt.Sprintf("%s（%s）在群「%s」中说：", contactName, contactId, room),
-			"text":  fmt.Sprintf("%s", sendContent),
-		})
-		if err != nil {
-			panic(err)
-			return
+
+		elements := make([]interface{}, 2)
+		elements[0] = &feishuModel.ContentModule{
+			Tag: "div",
+			Text: &feishuModel.TextModule{
+				Tag:     "plain_text",
+				Content: sendContent,
+			},
 		}
-		resp, err = http.Post(
-			configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
-		if err != nil {
-			panic(err)
-			return
-		}
-		defer resp.Body.Close()
-		rst, err = ioutil.ReadAll(resp.Body)
-		if err != nil {
-			panic(err)
-			return
-		}
-		log.Println(string(rst))
+		elements[1] = actionModule
+
+		title := fmt.Sprintf(
+			"%s（%s）在群「%s」中说：", wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.RoomTopic)
+		accessToken := p.feishuBotController.GetAccessToken()
+		p.feishuMessageApi.SendInteractiveCard(
+			configs.DefaultConfig.LarkTextRoom.ChatID, title, elements, accessToken)
 	}
 }
 

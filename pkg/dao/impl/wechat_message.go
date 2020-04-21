@@ -54,13 +54,26 @@ func (p *WechatMessageDAOImpl) GetRecentMessages(wxid string, roomId string, cre
 	var stmtQuery *sql.Stmt
 	var err error
 	if direction == "before" {
-		stmtQuery, err = connection.DB.Prepare(
-			`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
+		if len(wxid) > 0 {
+			stmtQuery, err = connection.DB.Prepare(
+				`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
 	WHERE wxid = ? AND room_id = ? AND created_at <= ? order by id desc limit 10`)
+		} else {
+			stmtQuery, err = connection.DB.Prepare(
+				`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
+	WHERE room_id = ? AND created_at <= ? order by id desc limit 10`)
+		}
+
 	} else {
-		stmtQuery, err = connection.DB.Prepare(
-			`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
+		if len(wxid) > 0 {
+			stmtQuery, err = connection.DB.Prepare(
+				`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
 	WHERE wxid = ? AND room_id = ? AND created_at >= ? order by id asc limit 10`)
+		} else {
+			stmtQuery, err = connection.DB.Prepare(
+				`SELECT id, wxid, wechat_name, room_name, content, msg_type, created_at, room_id, message_id FROM wechat_message_monitor
+	WHERE room_id = ? AND created_at >= ? order by id asc limit 10`)
+		}
 	}
 
 	if err != nil {

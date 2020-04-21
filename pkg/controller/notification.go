@@ -1,9 +1,12 @@
 package controller
 
-import "github.com/fatelei/juzimiaohui-webhook/pkg/dao"
+import (
+	"github.com/fatelei/juzimiaohui-webhook/pkg/dao"
+	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
+)
 
 type NotificationController interface {
-	CreateNotification(room string, contactName string, contentId string, content string)
+	CreateNotification(message *model.WechatMessage)
 	CreateWechatDeathNoti()
-	SendRecentMessagesCard(messages []*dao.WechatMessage)
+	SendRecentMessagesCard(chatID string, messages []*dao.WechatMessage)
 }

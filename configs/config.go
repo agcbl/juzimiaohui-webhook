@@ -36,8 +36,15 @@ type LarkBot struct {
 	AppID string `toml:"app_id"`
 	AppSecret string `toml:"app_secret"`
 	EndPoint string `toml:"endpoint"`
-	ChatID string `toml:"chat_id"`
 	Token string `toml:"token"`
+}
+
+type LarkPictureRoom struct {
+	ChatID string `toml:"chat_id"`
+}
+
+type LarkTextRoom struct {
+	ChatID string `toml:"chat_id"`
 }
 
 type WhiteList struct {
@@ -52,6 +59,8 @@ type Config struct {
 	Alive *Alive
 	LarkBot *LarkBot `toml:"lark_bot"`
 	WhiteList *WhiteList `toml:"whitelist"`
+	LarkPictureRoom *LarkPictureRoom `toml:"lark_picture_room"`
+	LarkTextRoom *LarkTextRoom `toml:"lark_text_room"`
 }
 
 var DefaultConfig Config

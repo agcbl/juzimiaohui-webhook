@@ -100,19 +100,18 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 		if wechatMessage.Type == model.Image {
 			go p.notificationController.CreateMessageCard(wechatMessage)
 		} else {
-			p.notificationController.CreateNotification(
-				wechatMessage.RoomTopic, wechatMessage.ContactName, wechatMessage.ContactId, wechatMessage.GetContent())
+			p.notificationController.CreateNotification(wechatMessage)
 		}
 		p.recordActive(wechatMessage)
 	}
 }
 
-func (p *WechatMessageControllerImpl) GetRecentMessages(wxid string, roomId string, createdAt string, direction string) {
+func (p *WechatMessageControllerImpl) GetRecentMessages(chatID string, wxid string, roomId string, createdAt string, direction string) {
 	timestamp, _ := strconv.Atoi(createdAt)
 	tm := time.Unix(int64(timestamp/1000), 0)
 	createdAtStr := tm.Format("2006-01-02 15:04:05")
 	messages := impl.DefaultWechatMessageDAO.GetRecentMessages(wxid, roomId, createdAtStr, direction)
-	p.notificationController.SendRecentMessagesCard(messages)
+	p.notificationController.SendRecentMessagesCard(chatID, messages)
 }
 
 

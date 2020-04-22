@@ -60,7 +60,6 @@ func (p *FeishuCallback) Callback(c *gin.Context) {
 					} else {
 						p.wechatMessageController.GetRecentMessages(chatID, wxid, roomID, createdAt, direction)
 					}
-
 				}
 			}
 		}

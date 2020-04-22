@@ -2,6 +2,7 @@ package impl
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/connection"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/model"
@@ -76,6 +77,7 @@ func (p *WechatMessageDAOImpl) GetRecentMessages(wxid string, roomId string, cre
 		}
 	}
 
+	fmt.Printf("%+v\n", stmtQuery)
 	if err != nil {
 		panic(err)
 	}

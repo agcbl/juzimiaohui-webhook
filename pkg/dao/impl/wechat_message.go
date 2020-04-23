@@ -84,7 +84,14 @@ func (p *WechatMessageDAOImpl) GetRecentMessages(wxid string, roomId string, cre
 
 	defer stmtQuery.Close()
 	results := make([]*dao.WechatMessage, 0)
-	rows, err := stmtQuery.Query(wxid, roomId, createdAt)
+	var rows *sql.Rows
+	var err error
+	if len(wxid) > 0 {
+		rows, err = stmtQuery.Query(wxid, roomId, createdAt)
+	} else {
+		rows, err = stmtQuery.Query(roomId, createdAt)
+	}
+
 	if err != nil {
 		return results
 	}

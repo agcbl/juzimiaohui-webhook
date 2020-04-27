@@ -53,6 +53,7 @@ func (p *FeishuCallback) Callback(c *gin.Context) {
 				createdAt, _ := valueMap["timestamp"].(string)
 				direction, _ := valueMap["direction"].(string)
 				chatID, _ := valueMap["chat_id"].(string)
+				action, _ := valueMap["action"].(string)
 				if len(roomID) > 0 && len(createdAt) > 0 && len(direction) > 0 {
 					if len(chatID) == 0 {
 						p.wechatMessageController.GetRecentMessages(

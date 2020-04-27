@@ -41,6 +41,17 @@ CREATE TABLE `wechat_user_info` (
     KEY `idx_wxid` (`wxid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `wechat_room_member` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `wxid` varchar(1024) NOT NULL,
+  `wechat_name` varchar(1024) DEFAULT '',
+  `room_name` varchar(1024) DEFAULT '',
+  `room_id` varchar(200) NOT NULL,
+  `room_alias` varchar(1024) DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `idx_wechat_name` (`wechat_name`(191)),
+  KEY `idx_room_id` (`room_id`(191))
+) ENGINE=InnoDB AUTO_INCREMENT=36194 DEFAULT CHARSET=utf8mb4
 
 CREATE TABLE `keyword` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,

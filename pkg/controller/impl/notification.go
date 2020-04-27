@@ -51,6 +51,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		prevButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 		prevButton.SetValue("direction", "before")
 		prevButton.SetValue("chat_id", configs.DefaultConfig.LarkPictureRoom.ChatID)
+		prevButton.SetValue("action", "loadMyRoomMessage")
 
 		nextButton := feishuModel.ButtonModule{
 			Tag:   "button",
@@ -62,6 +63,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		nextButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 		nextButton.SetValue("direction", "after")
 		nextButton.SetValue("chat_id", configs.DefaultConfig.LarkPictureRoom.ChatID)
+		prevButton.SetValue("action", "loadMyRoomMessage")
 
 		actionModule := &feishuModel.ActionModule{
 			Tag:     "action",
@@ -100,6 +102,45 @@ func (p *NotificationControllerImpl) SendRecentMessagesCard(chatID string, messa
 	}
 }
 
+
+func (p *NotificationControllerImpl) SendRoomRecentMessagesCard(
+	chatID string, messages []*dao.WechatMessage, roomAlias map[string]string) {
+	accessToken := p.feishuBotController.GetAccessToken()
+	if len(messages) > 0 {
+		elements := make([]interface{}, len(messages))
+		var title string
+		var hasAlias bool
+		var alias string
+		for index, item := range messages {
+			if len(title) == 0 {
+				title = fmt.Sprintf("%s - %s：", item.RoomName, item.RoomID)
+			}
+
+			alias, hasAlias = roomAlias[item.WxID]
+			if !hasAlias {
+				alias = item.WechatName
+			}
+
+			element := &feishuModel.ContentModule{
+				Tag: "div",
+				Text: &feishuModel.TextModule{
+					Tag:     "plain_text",
+					Content: fmt.Sprintf(
+						"%s %s(%s)：%s", item.CreatedAt.Format("2006-01-02 15:04:05"), alias, item.WxID, item.Content),
+				},
+			}
+			elements[index] = element
+		}
+		resp, err := p.feishuMessageApi.SendInteractiveCard(chatID, title, elements, accessToken)
+		if err != nil {
+			log.Printf("%+v\n", err)
+		} else {
+			log.Printf("%+v\n", resp)
+		}
+	}
+}
+
+
 func (p *NotificationControllerImpl) CreateNotification(wechatMessage *model.WechatMessage) {
 	content := wechatMessage.GetContent()
 	hitWord := p.keywordController.Search(content)
@@ -118,6 +159,7 @@ func (p *NotificationControllerImpl) CreateNotification(wechatMessage *model.Wec
 		prevButton.SetValue("timestamp", strconv.Itoa(wechatMessage.Timestamp))
 		prevButton.SetValue("direction", "before")
 		prevButton.SetValue("chat_id", configs.DefaultConfig.LarkTextRoom.ChatID)
+		prevButton.SetValue("action", "loadRoomMessage")
 
 		nextButton := feishuModel.ButtonModule{
 			Tag:   "button",
@@ -129,6 +171,7 @@ func (p *NotificationControllerImpl) CreateNotification(wechatMessage *model.Wec
 		nextButton.SetValue("timestamp", strconv.Itoa(wechatMessage.Timestamp))
 		nextButton.SetValue("direction", "after")
 		nextButton.SetValue("chat_id", configs.DefaultConfig.LarkTextRoom.ChatID)
+		prevButton.SetValue("action", "loadRoomMessage")
 
 		actionModule := &feishuModel.ActionModule{
 			Tag:     "action",

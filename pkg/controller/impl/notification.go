@@ -63,7 +63,7 @@ func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMess
 		nextButton.SetValue("timestamp", strconv.Itoa(message.Timestamp))
 		nextButton.SetValue("direction", "after")
 		nextButton.SetValue("chat_id", configs.DefaultConfig.LarkPictureRoom.ChatID)
-		prevButton.SetValue("action", "loadMyRoomMessage")
+		nextButton.SetValue("action", "loadMyRoomMessage")
 
 		actionModule := &feishuModel.ActionModule{
 			Tag:     "action",
@@ -171,7 +171,7 @@ func (p *NotificationControllerImpl) CreateNotification(wechatMessage *model.Wec
 		nextButton.SetValue("timestamp", strconv.Itoa(wechatMessage.Timestamp))
 		nextButton.SetValue("direction", "after")
 		nextButton.SetValue("chat_id", configs.DefaultConfig.LarkTextRoom.ChatID)
-		prevButton.SetValue("action", "loadRoomMessage")
+		nextButton.SetValue("action", "loadRoomMessage")
 
 		actionModule := &feishuModel.ActionModule{
 			Tag:     "action",

@@ -2,14 +2,12 @@ FROM golang:latest
 LABEL maintainer="fatelei@gmail.com"
 LABEL version="1.0"
 LABEL description="juzhimiaohui webhook"
-RUN mkdir -p $GOPATH/src/github.com/fatelei
-RUN go env -w GOPROXY=https://goproxy.cn
+RUN mkdir -p $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
 ARG CACHEBUST=1
-RUN cd $GOPATH/src/github.com/fatelei && git clone https://github.com/fatelei/juzimiaohui-webhook.git
-WORKDIR $GOPATH/src/github.com/fatelei/juzimiaohui-webhook
-RUN ls -l $GOPATH/src/github.com/fatelei/juzimiaohui-webhook
-RUN go mod tidy
-RUN go build -o bin/web -i cmd/web/main.go
+COPY juzimiaohui-webhook.tar.gz /tmp
+RUN tar -xvf /tmp/juzimiaohui-webhook.tar.gz -C $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
+WORKDIR $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
+RUN go mod tidy && go build -o bin/web -i cmd/web/main.go
 ENV GIN_MODE=release
 CMD ["bin/web", "-config", "/etc/webhook.toml"]
 EXPOSE 8000

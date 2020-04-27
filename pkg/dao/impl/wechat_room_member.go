@@ -3,6 +3,7 @@ package impl
 import (
 	"github.com/fatelei/juzimiaohui-webhook/pkg/connection"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/dao"
+	"strings"
 )
 
 type WechatRoomMemberDAOImpl struct {}
@@ -28,7 +29,7 @@ func (p *WechatRoomMemberDAOImpl) GetRoomAlias(roomID string, wxIDs []string) ma
 
 	defer stmtQuery.Close()
 	result := make(map[string]string)
-	rows, _ := stmtQuery.Query(roomID, wxIDs)
+	rows, _ := stmtQuery.Query(roomID, strings.Join(wxIDs, ","))
 	for rows.Next() {
 		var wxid string
 		var roomAlias string

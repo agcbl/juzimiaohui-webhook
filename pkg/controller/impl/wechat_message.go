@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"fmt"
 	"github.com/fatelei/juzihudong-sdk/pkg/juzihudong"
 	"github.com/fatelei/juzimiaohui-webhook/configs"
 	"github.com/fatelei/juzimiaohui-webhook/pkg/controller"
@@ -112,6 +113,7 @@ func (p *WechatMessageControllerImpl) GetRecentMessages(
 	tm := time.Unix(int64(timestamp/1000), 0)
 	createdAtStr := tm.Format("2006-01-02 15:04:05")
 	messages := impl.DefaultWechatMessageDAO.GetRecentMessages(wxid, roomId, createdAtStr, direction)
+	fmt.Printf("%+v\n", messages)
 	if len(messages) > 0 {
 		if action == "loadMyRoomMessage" {
 			p.notificationController.SendRecentMessagesCard(chatID, messages)

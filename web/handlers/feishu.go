@@ -54,13 +54,8 @@ func (p *FeishuCallback) Callback(c *gin.Context) {
 				direction, _ := valueMap["direction"].(string)
 				chatID, _ := valueMap["chat_id"].(string)
 				action, _ := valueMap["action"].(string)
-				if len(roomID) > 0 && len(createdAt) > 0 && len(direction) > 0 {
-					if len(chatID) == 0 {
-						p.wechatMessageController.GetRecentMessages(
-							configs.DefaultConfig.LarkPictureRoom.ChatID, wxid, roomID, createdAt, direction)
-					} else {
-						p.wechatMessageController.GetRecentMessages(chatID, wxid, roomID, createdAt, direction)
-					}
+				if len(roomID) > 0 && len(createdAt) > 0 && len(direction) > 0 && len(action) > 0 && len(chatID) > 0{
+					p.wechatMessageController.GetRecentMessages(chatID, wxid, roomID, createdAt, direction, action)
 				}
 			}
 		}

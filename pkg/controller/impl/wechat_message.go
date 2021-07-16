@@ -70,7 +70,7 @@ func (p *WechatMessageControllerImpl) Create(wechatMessage *model.WechatMessage)
 	}
 
 	var flag = false
-	room := impl.DefaultWechatRoomDAOImpl.GetRoomByRoomId(wechatMessage.RoomId)
+	room := impl.DefaultWechatRoomDAOImpl.GetRoomByRoomTopic(wechatMessage.RoomTopic)
 	if room == nil {
 		flag = true
 		if wechatMessage.Type != 10001 {

@@ -39,7 +39,7 @@ func NewNotificationController() *NotificationControllerImpl {
 
 func (p *NotificationControllerImpl) CreateMessageCard(message *model.WechatMessage) {
 	accessToken := p.feishuBotController.GetAccessToken()
-	imageResp, err := p.feishuImageApi.UploadFromUri(message.Payload.ImageUrl, accessToken)
+	imageResp, err := p.feishuImageApi.UploadFromB64Encode(message.Payload.ImageUrl, accessToken)
 	if err == nil && imageResp.Data != nil {
 		prevButton := feishuModel.ButtonModule{
 			Tag:   "button",
@@ -200,6 +200,38 @@ func (p *NotificationControllerImpl) CreateNotification(wechatMessage *model.Wec
 			configs.DefaultConfig.LarkTextRoom.ChatID, title, elements, accessToken)
 	}
 }
+
+func (p *NotificationControllerImpl) CreateQrcodeMessage(qrcode string) {
+	var body []byte
+	var err error
+	var rst []byte
+	var resp *http.Response
+
+	if configs.DefaultConfig.Lark != nil {
+		body, err = json.Marshal(map[string]string{
+			"title": "请点击下方的链接进行扫码",
+			"text":  fmt.Sprintf("<a href=\"%s\">微信登录</a>", qrcode),
+		})
+		if err != nil {
+			panic(err)
+			return
+		}
+		resp, err = http.Post(
+			configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
+		if err != nil {
+			panic(err)
+			return
+		}
+		defer resp.Body.Close()
+		rst, err = ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("error %+v\n", err)
+			return
+		}
+		log.Println(string(rst))
+	}
+}
+
 
 func (p *NotificationControllerImpl) CreateWechatDeathNoti() {
 	var body []byte

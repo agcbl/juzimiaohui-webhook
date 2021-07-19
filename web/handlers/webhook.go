@@ -14,9 +14,25 @@ type WebhookHandler struct {
 	wechatMessageController *impl.WechatMessageControllerImpl
 }
 
+type qrcode struct {
+	URL string `json:"url"`
+}
+
 func NewWebhookHandler() *WebhookHandler {
 	wechatMessageController := impl.NewWechatMessageController()
 	return &WebhookHandler{wechatMessageController:wechatMessageController}
+}
+
+func (p *WebhookHandler) QRCodeCallback(c *gin.Context) {
+	var data qrcode
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Println(data.URL)
+	p.wechatMessageController.SendLoginUrl(data.URL)
+	c.JSON(http.StatusCreated, gin.H{})
+	return
 }
 
 
@@ -26,7 +42,7 @@ func (p *WebhookHandler) MessageCallback(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Printf("%+v\n", data.Data)
+	log.Printf("room %s received message", data.Data.RoomTopic)
 	isInWhiteList := impl2.DefaultWechatWhiteListDAO.IsInWhiteList(data.Data.ContactId)
 	if !isInWhiteList {
 		if data.Data.RoomId == configs.DefaultConfig.WhiteList.RoomID {

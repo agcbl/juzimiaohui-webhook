@@ -10,6 +10,7 @@ func Routes() *gin.Engine {
 	webhookHandler := handlers.NewWebhookHandler()
 	feishuHandler := handlers.NewFeishuCallback()
 	r.POST("/message", webhookHandler.MessageCallback)
+	r.POST("/qr_code", webhookHandler.QRCodeCallback)
 	r.POST("/feishu/message_card_interactive", feishuHandler.Callback)
 	return r
 }

@@ -20,6 +20,8 @@ github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1m
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/fatelei/go-feishu v1.0.8 h1:NYTlbNc1Dgnk2oQ8848jBghnTEib8CETgMQD594j1jI=
 github.com/fatelei/go-feishu v1.0.8/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
+github.com/fatelei/go-feishu v1.0.9 h1:MRKgzlo8cQ4hBzKF7kKzKv18Ot6VWFyY2B0fc1Hd/QA=
+github.com/fatelei/go-feishu v1.0.9/go.mod h1:KQ3vtYRcgWwsELXmoAXV/Vb9S1Op95G7dt1taMLNtKY=
 github.com/fatelei/juzihudong-sdk v1.0.0 h1:0dt7Uab+lwE3oRdstEZlv54SJk/pWhNfyC8oK6CsDKM=
 github.com/fatelei/juzihudong-sdk v1.0.0/go.mod h1:g3j8E8T9DLcdiGE2FWUCuqmpEIT4QkVj+9o+sLSsEkc=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=

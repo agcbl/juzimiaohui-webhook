@@ -4,8 +4,7 @@ LABEL version="1.0"
 LABEL description="juzhimiaohui webhook"
 RUN mkdir -p $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
 ARG CACHEBUST=1
-COPY juzimiaohui-webhook.tar.gz /tmp
-RUN tar -xvf /tmp/juzimiaohui-webhook.tar.gz -C $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
+COPY . $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
 WORKDIR $GOPATH/src/github.com/agcbl/juzimiaohui-webhook
 RUN go mod tidy && go build -o bin/web -i cmd/web/main.go
 ENV GIN_MODE=release

@@ -12,5 +12,6 @@ func Routes() *gin.Engine {
 	r.POST("/message", webhookHandler.MessageCallback)
 	r.POST("/qr_code", webhookHandler.QRCodeCallback)
 	r.POST("/feishu/message_card_interactive", feishuHandler.Callback)
+	r.POST("/simple_message", webhookHandler.SinpleMessage)
 	return r
 }

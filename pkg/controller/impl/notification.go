@@ -213,13 +213,44 @@ func (p *NotificationControllerImpl) CreateQrcodeMessage(qrcode string) {
 			"text":  fmt.Sprintf("<a href=\"%s\">微信登录</a>", qrcode),
 		})
 		if err != nil {
-			panic(err)
+			log.Printf("error: %+v\n", err)
 			return
 		}
 		resp, err = http.Post(
 			configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
 		if err != nil {
-			panic(err)
+			log.Printf("error: %+v\n", err)
+			return
+		}
+		defer resp.Body.Close()
+		rst, err = ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("error %+v\n", err)
+			return
+		}
+		log.Println(string(rst))
+	}
+}
+
+func (p *NotificationControllerImpl) CreateSimpleMessage(title, message string) {
+	var body []byte
+	var err error
+	var rst []byte
+	var resp *http.Response
+
+	if configs.DefaultConfig.Lark != nil {
+		body, err = json.Marshal(map[string]string{
+			"title": title,
+			"text":  message,
+		})
+		if err != nil {
+			log.Printf("error: %+v\n", err)
+			return
+		}
+		resp, err = http.Post(
+			configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
+		if err != nil {
+			log.Printf("error: %+v\n", err)
 			return
 		}
 		defer resp.Body.Close()
@@ -245,13 +276,13 @@ func (p *NotificationControllerImpl) CreateWechatDeathNoti() {
 			"text":  "请尽快检查绑定微信是否下线，如果已下线请尽快前往<a href=\"https://wechat.botorange.com/\">句子互动</a>后台重新登录",
 		})
 		if err != nil {
-			panic(err)
+			log.Printf("error: %+v\n", err)
 			return
 		}
 		resp, err = http.Post(
 			configs.DefaultConfig.Lark.Path, "application/json", bytes.NewReader(body))
 		if err != nil {
-			panic(err)
+			log.Printf("error: %+v\n", err)
 			return
 		}
 		defer resp.Body.Close()

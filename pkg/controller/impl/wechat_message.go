@@ -129,6 +129,10 @@ func (p *WechatMessageControllerImpl) SendLoginUrl(qrcode string) {
 	p.notificationController.CreateQrcodeMessage(qrcode)
 }
 
+func (p *WechatMessageControllerImpl) SendSimpleMessage(title, message string) {
+	p.notificationController.CreateSimpleMessage(title, message)
+}
+
 func (p *WechatMessageControllerImpl) checkAlive() {
 	go func() {
 		for {

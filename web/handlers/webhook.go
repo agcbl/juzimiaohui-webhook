@@ -18,9 +18,14 @@ type qrcode struct {
 	URL string `json:"url"`
 }
 
+type SimpleMessage struct {
+	Message string `json:"message"`
+	Title   string `json:"title"`
+}
+
 func NewWebhookHandler() *WebhookHandler {
 	wechatMessageController := impl.NewWechatMessageController()
-	return &WebhookHandler{wechatMessageController:wechatMessageController}
+	return &WebhookHandler{wechatMessageController: wechatMessageController}
 }
 
 func (p *WebhookHandler) QRCodeCallback(c *gin.Context) {
@@ -35,6 +40,16 @@ func (p *WebhookHandler) QRCodeCallback(c *gin.Context) {
 	return
 }
 
+func (p *WebhookHandler) SinpleMessage(c *gin.Context) {
+	var data SimpleMessage
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	p.wechatMessageController.SendSimpleMessage(data.Title, data.Message)
+	c.JSON(http.StatusCreated, gin.H{})
+	return
+}
 
 func (p *WebhookHandler) MessageCallback(c *gin.Context) {
 	var data model.WechatMessageData
@@ -54,4 +69,3 @@ func (p *WebhookHandler) MessageCallback(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{})
 	return
 }
-
